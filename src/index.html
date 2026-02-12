@@ -9,7 +9,7 @@
     <title id="pageTitle">深呼吸 - 3分钟解压</title>
     <style>
         :root{--bg1:#1a1a2e;--bg2:#16213e;--bg3:#0f3460;--accent:#a29bfe;--accent2:#6c5ce7;--text:#f5f5f5;--text2:#7f8fa6;--text3:#555}
-        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
         body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));min-height:100vh;color:var(--text)}
         .container{max-width:420px;margin:0 auto;padding:20px;min-height:100vh}
         .header{text-align:center;padding:30px 0 20px}
@@ -100,17 +100,41 @@
         .timer-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:8px 16px;font-size:13px;color:var(--text);cursor:pointer}
         .timer-btn.active{background:rgba(162,155,254,0.3);border-color:var(--accent)}
         .timer-display{margin-top:12px;font-size:13px;color:var(--text3)}
-        .touch-tabs{display:flex;gap:10px;margin-bottom:24px}
-        .touch-tab{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:10px 20px;font-size:14px;color:var(--text);cursor:pointer}
+        
+        /* 触感模块增强 */
+        .touch-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;justify-content:center}
+        .touch-tab{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:10px 16px;font-size:13px;color:var(--text);cursor:pointer}
         .touch-tab.active{background:rgba(162,155,254,0.3);border-color:var(--accent)}
-        .touch-area{width:100%;max-width:340px;aspect-ratio:1;border-radius:20px;overflow:hidden;position:relative}
-        .stress-ball{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#2d1b4e,#1a1a2e)}
-        .ball{width:60%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9ff3,#f368e0 40%,#be2edd 80%);box-shadow:0 20px 40px rgba(0,0,0,0.4);transition:transform .1s,border-radius .1s;cursor:pointer}
-        .ball:active{transform:scale(0.85);border-radius:45%}
-        .ball-hint{position:absolute;bottom:20px;font-size:12px;color:var(--text3)}
-        .sandbox{width:100%;height:100%;background:linear-gradient(180deg,#d4a574,#c49a6c);cursor:crosshair;touch-action:none}
-        .sandbox-tools{position:absolute;top:10px;right:10px;display:flex;gap:8px}
-        .sandbox-btn{background:rgba(0,0,0,0.2);border:none;border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer}
+        .touch-area{width:100%;max-width:340px;height:340px;border-radius:20px;overflow:hidden;position:relative;background:#1a1a2e}
+        .touch-hint{text-align:center;font-size:12px;color:var(--text3);margin-top:16px;line-height:1.6}
+        
+        /* 解压球增强 */
+        .ball-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 60%,#2d1b4e,#1a1a2e);position:relative}
+        .ball-wrapper{position:relative;width:180px;height:180px}
+        .ball{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 25%,#ffb8d0,#ff6b9d 30%,#e91e8c 60%,#b8156b 85%);box-shadow:0 30px 60px rgba(0,0,0,0.5),inset 0 -20px 40px rgba(0,0,0,0.3),inset 0 10px 30px rgba(255,255,255,0.2);cursor:pointer;transition:none;transform-origin:center center}
+        .ball-shadow{position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);width:140px;height:20px;background:radial-gradient(ellipse,rgba(0,0,0,0.4),transparent 70%);border-radius:50%;transition:all 0.3s}
+        .ball-pressure{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-size:14px;color:var(--accent);opacity:0;transition:opacity 0.3s}
+        
+        /* 沙盘增强 */
+        .sand-container{width:100%;height:100%;position:relative;overflow:hidden}
+        .sand-canvas{width:100%;height:100%;touch-action:none;cursor:crosshair}
+        .sand-guide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:rgba(255,255,255,0.3);pointer-events:none;transition:opacity 0.5s}
+        .sand-guide.hidden{opacity:0}
+        .sand-guide-icon{font-size:48px;margin-bottom:12px}
+        .sand-guide-text{font-size:14px;line-height:1.6}
+        .sand-tools{position:absolute;top:10px;right:10px;display:flex;gap:8px}
+        .sand-btn{background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;color:#fff}
+        .sand-quote{position:absolute;bottom:15px;left:15px;right:15px;text-align:center;font-size:11px;color:rgba(255,255,255,0.25);font-style:italic}
+        
+        /* 禅绕画 */
+        .zen-container{width:100%;height:100%;position:relative}
+        .zen-canvas{width:100%;height:100%;touch-action:none;background:#f5f0e6;border-radius:16px}
+        .zen-guide{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:0.15}
+        .zen-progress{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--text3)}
+        .zen-pattern-select{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:8px;justify-content:center}
+        .zen-pattern-btn{background:rgba(0,0,0,0.1);border:none;border-radius:8px;padding:6px 12px;font-size:11px;color:#666;cursor:pointer}
+        .zen-pattern-btn.active{background:var(--accent);color:#fff}
+        
         .footer{text-align:center;padding:30px 0;font-size:12px;color:var(--text3)}
     </style>
 </head>
@@ -211,11 +235,14 @@
     <div class="page" id="touch-page">
         <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">🖐️ 触感解压</div><div style="width:40px"></div></div>
         <div class="page-content">
-            <div class="science-card"><h4>🔬 科学原理</h4><p>重复性手部动作激活"程序性记忆"系统，绕过负责焦虑的前额叶皮层，产生类似冥想的效果。</p><div class="source">— Csikszentmihalyi, Flow 1990</div></div>
-            <div class="touch-tabs"><button class="touch-tab active" onclick="switchTouch(this,'ball')">解压球</button><button class="touch-tab" onclick="switchTouch(this,'sand')">数字沙盘</button></div>
-            <div class="touch-area" id="touchArea">
-                <div class="stress-ball" id="stressBall"><div class="ball" id="ball"></div><div class="ball-hint">按住挤压</div></div>
+            <div class="science-card"><h4>🔬 科学原理</h4><p>重复性手部动作激活"程序性记忆"系统，绕过负责焦虑的前额叶皮层，产生类似冥想的心流状态。</p><div class="source">— Csikszentmihalyi, Flow 1990</div></div>
+            <div class="touch-tabs">
+                <button class="touch-tab active" onclick="switchTouch('ball')">🔮 解压球</button>
+                <button class="touch-tab" onclick="switchTouch('sand')">🏖️ 禅意沙盘</button>
+                <button class="touch-tab" onclick="switchTouch('zen')">🌀 禅绕画</button>
             </div>
+            <div class="touch-area" id="touchArea"></div>
+            <div class="touch-hint" id="touchHint">按住球体，感受它在指尖变形</div>
         </div>
     </div>
 
@@ -223,8 +250,8 @@
 const titles={home:'深呼吸 - 3分钟解压',breath:'科学呼吸 - 深呼吸',daze:'发呆模式 - 深呼吸',bubble:'捏泡泡 - 深呼吸',tear:'撕纸解压 - 深呼吸',sound:'声音疗愈 - 深呼吸',touch:'触感解压 - 深呼吸'};
 const moodRec={anxious:[{n:'🫁 呼吸',p:'breath'},{n:'📻 白噪音',p:'sound'}],sad:[{n:'🌧️ 雨声',p:'sound'},{n:'🌀 发呆',p:'daze'}],angry:[{n:'🫧 泡泡',p:'bubble'},{n:'📄 撕纸',p:'tear'}],tired:[{n:'🔥 篝火',p:'sound'},{n:'🌀 发呆',p:'daze'}],unclear:[{n:'🫁 呼吸',p:'breath'},{n:'🖐️ 触感',p:'touch'}]};
 function selectMood(btn,mood){document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');vibrate(30);const s=document.getElementById('recommendSection'),c=document.getElementById('recommendBtns');c.innerHTML=moodRec[mood].map(r=>`<button class="recommend-btn" onclick="openPage('${r.p}')">${r.n}</button>`).join('');s.classList.add('show');setTimeout(()=>s.scrollIntoView({behavior:'smooth',block:'center'}),100)}
-function openPage(p){document.getElementById(p+'-page').classList.add('active');document.getElementById('home').style.display='none';document.getElementById('pageTitle').textContent=titles[p];if(p==='bubble')initBubbles();if(p==='daze')initDaze();if(p==='touch')initTouch();vibrate(30)}
-function closePage(){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('home').style.display='block';document.getElementById('pageTitle').textContent=titles.home;if(breathInterval)stopBreath();if(dazeInterval)stopDaze();stopAllSounds()}
+function openPage(p){document.getElementById(p+'-page').classList.add('active');document.getElementById('home').style.display='none';document.getElementById('pageTitle').textContent=titles[p];if(p==='bubble')initBubbles();if(p==='daze')initDaze();if(p==='touch')switchTouch('ball');vibrate(30)}
+function closePage(){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('home').style.display='block';document.getElementById('pageTitle').textContent=titles.home;if(breathInterval)stopBreath();if(dazeInterval)stopDaze();stopAllSounds();stopBallVibration()}
 function vibrate(p){if(navigator.vibrate)navigator.vibrate(p)}
 
 // 呼吸
@@ -272,12 +299,298 @@ function setSoundTimer(btn,min){document.querySelectorAll('.timer-btn').forEach(
 function updateTimerDisplay(){const left=Math.max(0,soundTimerEnd-Date.now()),m=Math.floor(left/60000),s=Math.floor((left%60000)/1000);document.getElementById('timerDisplay').textContent=`${m}:${s.toString().padStart(2,'0')} 后自动停止`}
 function stopAllSounds(){Object.keys(activeNodes).forEach(k=>{activeNodes[k].src.stop();delete activeNodes[k]});document.querySelectorAll('.sound-item').forEach(el=>el.classList.remove('active'));if(soundTimer){clearInterval(soundTimer);soundTimer=null}document.getElementById('timerDisplay').textContent=''}
 
-// 触感
-let sandCtx=null,isDrawing=false;
-function initTouch(){const ball=document.getElementById('ball');ball.ontouchstart=ball.onmousedown=()=>vibrate(20);ball.ontouchend=ball.onmouseup=()=>vibrate(10)}
-function switchTouch(btn,mode){document.querySelectorAll('.touch-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');const area=document.getElementById('touchArea');if(mode==='ball'){area.innerHTML='<div class="stress-ball" id="stressBall"><div class="ball" id="ball"></div><div class="ball-hint">按住挤压</div></div>';initTouch()}else{area.innerHTML='<canvas class="sandbox" id="sandCanvas"></canvas><div class="sandbox-tools"><button class="sandbox-btn" onclick="clearSand()">🔄</button></div>';initSand()}}
-function initSand(){const c=document.getElementById('sandCanvas'),ctx=c.getContext('2d');c.width=c.offsetWidth;c.height=c.offsetHeight;ctx.fillStyle='#c49a6c';ctx.fillRect(0,0,c.width,c.height);sandCtx=ctx;let lastX,lastY;function draw(x,y){ctx.strokeStyle='#8b6914';ctx.lineWidth=8+Math.random()*4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(lastX,lastY);ctx.lineTo(x,y);ctx.stroke();lastX=x;lastY=y;vibrate(5)}c.ontouchstart=c.onmousedown=(e)=>{isDrawing=true;const r=c.getBoundingClientRect(),t=e.touches?e.touches[0]:e;lastX=t.clientX-r.left;lastY=t.clientY-r.top};c.ontouchmove=c.onmousemove=(e)=>{if(!isDrawing)return;e.preventDefault();const r=c.getBoundingClientRect(),t=e.touches?e.touches[0]:e;draw(t.clientX-r.left,t.clientY-r.top)};c.ontouchend=c.onmouseup=()=>isDrawing=false}
-function clearSand(){if(sandCtx){const c=document.getElementById('sandCanvas');sandCtx.fillStyle='#c49a6c';sandCtx.fillRect(0,0,c.width,c.height);vibrate([30,20,30])}}
+// ========== 触感模块（重写）==========
+let currentTouch='ball';
+let ballPressing=false,ballPressure=0,ballVibInterval=null,ballRecoverInterval=null;
+let sandCtx=null,sandDrawing=false,sandLastX=0,sandLastY=0,sandHasDrawn=false;
+let zenCtx=null,zenDrawing=false,zenLastX=0,zenLastY=0,zenPattern='spiral',zenStrokes=0;
+
+function switchTouch(mode){
+    currentTouch=mode;
+    document.querySelectorAll('.touch-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelector(`.touch-tab:nth-child(${mode==='ball'?1:mode==='sand'?2:3})`).classList.add('active');
+    stopBallVibration();
+    const area=document.getElementById('touchArea');
+    const hint=document.getElementById('touchHint');
+    
+    if(mode==='ball'){
+        area.innerHTML=`
+            <div class="ball-container">
+                <div class="ball-wrapper">
+                    <div class="ball" id="theBall"></div>
+                    <div class="ball-shadow" id="ballShadow"></div>
+                </div>
+                <div class="ball-pressure" id="ballPressure">释放压力...</div>
+            </div>`;
+        hint.innerHTML='按住球体，感受它在指尖变形<br>按得越久，解压效果越好';
+        initBall();
+    }else if(mode==='sand'){
+        area.innerHTML=`
+            <div class="sand-container">
+                <canvas class="sand-canvas" id="sandCanvas"></canvas>
+                <div class="sand-guide" id="sandGuide">
+                    <div class="sand-guide-icon">🏖️</div>
+                    <div class="sand-guide-text">用手指在沙上作画<br>画完后，轻轻摇动清空<br>一切都会过去</div>
+                </div>
+                <div class="sand-tools">
+                    <button class="sand-btn" onclick="shakeSand()">🔄</button>
+                </div>
+                <div class="sand-quote">"像沙一样，让烦恼随风而去"</div>
+            </div>`;
+        hint.innerHTML='用指尖在沙上写字或画画<br>摇一摇清空，象征放下执念';
+        initSand();
+    }else if(mode==='zen'){
+        area.innerHTML=`
+            <div class="zen-container">
+                <canvas class="zen-canvas" id="zenCanvas"></canvas>
+                <div class="zen-pattern-select">
+                    <button class="zen-pattern-btn active" onclick="setZenPattern('spiral')">螺旋</button>
+                    <button class="zen-pattern-btn" onclick="setZenPattern('wave')">波浪</button>
+                    <button class="zen-pattern-btn" onclick="setZenPattern('circles')">圆环</button>
+                </div>
+                <div class="zen-progress" id="zenProgress">跟随灰色引导线慢慢描绘</div>
+            </div>`;
+        hint.innerHTML='禅绕画：跟随引导线描绘<br>不用追求完美，享受过程';
+        initZen();
+    }
+}
+
+// 解压球
+function initBall(){
+    const ball=document.getElementById('theBall');
+    const shadow=document.getElementById('ballShadow');
+    const pressureEl=document.getElementById('ballPressure');
+    ballPressing=false;ballPressure=0;
+    
+    function startPress(e){
+        e.preventDefault();
+        ballPressing=true;
+        pressureEl.style.opacity='1';
+        if(ballRecoverInterval){clearInterval(ballRecoverInterval);ballRecoverInterval=null;}
+        ballVibInterval=setInterval(()=>{
+            if(ballPressure<100)ballPressure+=2;
+            updateBallShape();
+            if(ballPressure%10===0)vibrate(10+ballPressure/5);
+        },50);
+    }
+    
+    function endPress(){
+        ballPressing=false;
+        if(ballVibInterval){clearInterval(ballVibInterval);ballVibInterval=null;}
+        vibrate([30,20,50]);
+        // 缓慢恢复
+        ballRecoverInterval=setInterval(()=>{
+            if(ballPressure>0){
+                ballPressure-=1;
+                updateBallShape();
+            }else{
+                clearInterval(ballRecoverInterval);
+                ballRecoverInterval=null;
+                pressureEl.style.opacity='0';
+            }
+        },30);
+    }
+    
+    function updateBallShape(){
+        const scale=1-ballPressure*0.003;
+        const skewX=ballPressure*0.15;
+        const borderRadius=50-ballPressure*0.15;
+        ball.style.transform=`scale(${scale},${scale*0.85+0.15}) skewX(${skewX}deg)`;
+        ball.style.borderRadius=`${borderRadius}% ${borderRadius}% ${50+ballPressure*0.2}% ${50+ballPressure*0.2}%`;
+        shadow.style.width=(140+ballPressure*0.3)+'px';
+        shadow.style.opacity=0.4+ballPressure*0.003;
+        const msgs=['按住不放...','继续...','感受压力释放...','很好，继续...','让压力流走...','🎉 太棒了！'];
+        pressureEl.textContent=msgs[Math.min(Math.floor(ballPressure/20),5)];
+    }
+    
+    ball.ontouchstart=ball.onmousedown=startPress;
+    ball.ontouchend=ball.onmouseup=ball.ontouchcancel=ball.onmouseleave=endPress;
+}
+
+function stopBallVibration(){
+    if(ballVibInterval){clearInterval(ballVibInterval);ballVibInterval=null;}
+    if(ballRecoverInterval){clearInterval(ballRecoverInterval);ballRecoverInterval=null;}
+}
+
+// 沙盘
+function initSand(){
+    const canvas=document.getElementById('sandCanvas');
+    const ctx=canvas.getContext('2d');
+    canvas.width=canvas.offsetWidth*2;
+    canvas.height=canvas.offsetHeight*2;
+    ctx.scale(2,2);
+    // 画沙底
+    drawSandBase(ctx,canvas.offsetWidth,canvas.offsetHeight);
+    sandCtx=ctx;sandHasDrawn=false;
+    
+    function getPos(e){
+        const r=canvas.getBoundingClientRect();
+        const t=e.touches?e.touches[0]:e;
+        return{x:t.clientX-r.left,y:t.clientY-r.top};
+    }
+    
+    canvas.ontouchstart=canvas.onmousedown=(e)=>{
+        e.preventDefault();
+        sandDrawing=true;
+        const p=getPos(e);
+        sandLastX=p.x;sandLastY=p.y;
+        if(!sandHasDrawn){
+            document.getElementById('sandGuide').classList.add('hidden');
+            sandHasDrawn=true;
+        }
+    };
+    canvas.ontouchmove=canvas.onmousemove=(e)=>{
+        if(!sandDrawing)return;
+        e.preventDefault();
+        const p=getPos(e);
+        drawSandLine(sandCtx,sandLastX,sandLastY,p.x,p.y);
+        sandLastX=p.x;sandLastY=p.y;
+        vibrate(3);
+    };
+    canvas.ontouchend=canvas.onmouseup=canvas.ontouchcancel=()=>sandDrawing=false;
+}
+
+function drawSandBase(ctx,w,h){
+    // 沙子底色
+    const grad=ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#d4a574');
+    grad.addColorStop(1,'#c49a6c');
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,w,h);
+    // 添加纹理
+    for(let i=0;i<2000;i++){
+        ctx.fillStyle=`rgba(${180+Math.random()*40},${140+Math.random()*30},${90+Math.random()*20},${0.3+Math.random()*0.3})`;
+        ctx.fillRect(Math.random()*w,Math.random()*h,1,1);
+    }
+}
+
+function drawSandLine(ctx,x1,y1,x2,y2){
+    // 画出痕迹（暗色）
+    ctx.strokeStyle='#8b6914';
+    ctx.lineWidth=10+Math.random()*5;
+    ctx.lineCap='round';
+    ctx.lineJoin='round';
+    ctx.beginPath();
+    ctx.moveTo(x1,y1);
+    ctx.lineTo(x2,y2);
+    ctx.stroke();
+    // 边缘高光
+    ctx.strokeStyle='rgba(255,240,200,0.3)';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(x1-3,y1-3);
+    ctx.lineTo(x2-3,y2-3);
+    ctx.stroke();
+}
+
+function shakeSand(){
+    vibrate([30,20,30,20,50]);
+    const canvas=document.getElementById('sandCanvas');
+    if(sandCtx){
+        drawSandBase(sandCtx,canvas.offsetWidth,canvas.offsetHeight);
+        sandHasDrawn=false;
+        document.getElementById('sandGuide').classList.remove('hidden');
+    }
+}
+
+// 禅绕画
+function initZen(){
+    const canvas=document.getElementById('zenCanvas');
+    const ctx=canvas.getContext('2d');
+    canvas.width=canvas.offsetWidth*2;
+    canvas.height=canvas.offsetHeight*2;
+    ctx.scale(2,2);
+    ctx.fillStyle='#f5f0e6';
+    ctx.fillRect(0,0,canvas.offsetWidth,canvas.offsetHeight);
+    zenCtx=ctx;zenStrokes=0;
+    drawZenGuide();
+    
+    function getPos(e){
+        const r=canvas.getBoundingClientRect();
+        const t=e.touches?e
+.touches[0]:e;
+        return{x:t.clientX-r.left,y:t.clientY-r.top};
+    }
+    
+    canvas.ontouchstart=canvas.onmousedown=(e)=>{
+        e.preventDefault();
+        zenDrawing=true;
+        const p=getPos(e);
+        zenLastX=p.x;zenLastY=p.y;
+    };
+    canvas.ontouchmove=canvas.onmousemove=(e)=>{
+        if(!zenDrawing)return;
+        e.preventDefault();
+        const p=getPos(e);
+        zenCtx.strokeStyle='#2d3436';
+        zenCtx.lineWidth=2;
+        zenCtx.lineCap='round';
+        zenCtx.beginPath();
+        zenCtx.moveTo(zenLastX,zenLastY);
+        zenCtx.lineTo(p.x,p.y);
+        zenCtx.stroke();
+        zenLastX=p.x;zenLastY=p.y;
+        zenStrokes++;
+        if(zenStrokes%20===0)vibrate(5);
+        updateZenProgress();
+    };
+    canvas.ontouchend=canvas.onmouseup=canvas.ontouchcancel=()=>zenDrawing=false;
+}
+
+function setZenPattern(pattern){
+    zenPattern=pattern;
+    document.querySelectorAll('.zen-pattern-btn').forEach(b=>b.classList.remove('active'));
+    event.target.classList.add('active');
+    const canvas=document.getElementById('zenCanvas');
+    zenCtx.fillStyle='#f5f0e6';
+    zenCtx.fillRect(0,0,canvas.offsetWidth,canvas.offsetHeight);
+    zenStrokes=0;
+    drawZenGuide();
+    document.getElementById('zenProgress').textContent='跟随灰色引导线慢慢描绘';
+}
+
+function drawZenGuide(){
+    const canvas=document.getElementById('zenCanvas');
+    const w=canvas.offsetWidth,h=canvas.offsetHeight;
+    const cx=w/2,cy=h/2;
+    zenCtx.strokeStyle='rgba(0,0,0,0.1)';
+    zenCtx.lineWidth=1;
+    zenCtx.setLineDash([5,5]);
+    
+    if(zenPattern==='spiral'){
+        zenCtx.beginPath();
+        for(let i=0;i<720;i++){
+            const angle=i*Math.PI/180;
+            const r=10+i*0.15;
+            const x=cx+r*Math.cos(angle);
+            const y=cy+r*Math.sin(angle);
+            i===0?zenCtx.moveTo(x,y):zenCtx.lineTo(x,y);
+        }
+        zenCtx.stroke();
+    }else if(zenPattern==='wave'){
+        for(let row=0;row<5;row++){
+            zenCtx.beginPath();
+            for(let x=20;x<w-20;x++){
+                const y=60+row*50+Math.sin(x*0.05)*15;
+                x===20?zenCtx.moveTo(x,y):zenCtx.lineTo(x,y);
+            }
+            zenCtx.stroke();
+        }
+    }else if(zenPattern==='circles'){
+        for(let i=1;i<=5;i++){
+            zenCtx.beginPath();
+            zenCtx.arc(cx,cy,i*25,0,Math.PI*2);
+            zenCtx.stroke();
+        }
+    }
+    zenCtx.setLineDash([]);
+}
+
+function updateZenProgress(){
+    const msgs=['刚开始...','继续描绘...','很好，保持专注...','进入心流状态...','🧘 完美的专注'];
+    const idx=Math.min(Math.floor(zenStrokes/100),4);
+    document.getElementById('zenProgress').textContent=msgs[idx];
+}
 </script>
 </body>
 </html>
