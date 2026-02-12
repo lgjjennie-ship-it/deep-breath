@@ -9,35 +9,23 @@
         :root{--bg:#0a0a0f;--card:rgba(255,255,255,0.03);--card-border:rgba(255,255,255,0.06);--accent:#818cf8;--accent2:#6366f1;--accent-glow:rgba(129,140,248,0.15);--text:#fafafa;--text2:rgba(255,255,255,0.5);--text3:rgba(255,255,255,0.25)}
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
         body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);min-height:100vh;min-height:100dvh;color:var(--text);overflow-x:hidden}
-        
-        /* 现代化容器 */
         .app{max-width:430px;margin:0 auto;min-height:100vh;min-height:100dvh;position:relative}
         .home{padding:0 20px 40px}
-        
-        /* 顶部渐变装饰 */
         .glow-top{position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,var(--accent-glow),transparent 70%);pointer-events:none;z-index:0}
-        
-        /* 头部 */
         .header{padding:60px 0 40px;text-align:center;position:relative;z-index:1}
         .logo{font-size:32px;font-weight:600;letter-spacing:-0.5px;background:linear-gradient(135deg,#fff,rgba(255,255,255,0.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
         .tagline{font-size:13px;color:var(--text2);margin-top:8px;font-weight:400}
-        
-        /* 情绪卡片 */
         .mood-card{background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:24px;padding:28px;margin-bottom:24px;position:relative;z-index:1}
         .mood-label{font-size:15px;font-weight:500;margin-bottom:20px;color:var(--text)}
         .mood-grid{display:flex;flex-wrap:wrap;gap:10px}
         .mood-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:10px 18px;font-size:14px;color:var(--text);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
         .mood-btn:active,.mood-btn.selected{background:var(--accent);border-color:var(--accent);transform:scale(0.97)}
-        
-        /* 推荐浮层 */
         .recommend{display:none;background:linear-gradient(135deg,rgba(129,140,248,0.1),rgba(99,102,241,0.05));border:1px solid rgba(129,140,248,0.2);border-radius:20px;padding:20px;margin-bottom:24px;position:relative;z-index:1}
         .recommend.show{display:block;animation:slideUp .3s ease}
         @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
         .recommend-label{font-size:13px;color:var(--accent);margin-bottom:14px;font-weight:500}
         .recommend-btns{display:flex;gap:10px;flex-wrap:wrap}
         .recommend-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:100px;padding:10px 20px;font-size:14px;color:#fff;cursor:pointer}
-        
-        /* 功能网格 */
         .modules{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;position:relative;z-index:1}
         .module{background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:24px 20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
         .module:active{transform:scale(0.98);background:rgba(255,255,255,0.05)}
@@ -46,8 +34,6 @@
         .module-desc{font-size:12px;color:var(--text2);margin-top:4px}
         .module::after{content:'';position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(circle at 100% 0%,var(--accent-glow),transparent);opacity:0;transition:opacity .3s}
         .module:active::after{opacity:1}
-        
-        /* 页面 */
         .page{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:100}
         .page.active{display:flex;flex-direction:column;animation:pageIn .3s ease}
         @keyframes pageIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -55,13 +41,9 @@
         .back-btn{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
         .page-title{font-size:17px;font-weight:500}
         .page-content{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px;overflow-y:auto}
-        
-        /* 科学卡片 */
         .science{background:linear-gradient(135deg,rgba(129,140,248,0.08),rgba(99,102,241,0.03));border:1px solid rgba(129,140,248,0.15);border-radius:16px;padding:16px 18px;margin-bottom:28px;width:100%;max-width:360px}
         .science-title{font-size:12px;color:var(--accent);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
         .science-text{font-size:13px;color:var(--text2);line-height:1.6}
-        
-        /* 呼吸 */
         .breath-visual{width:200px;height:200px;position:relative;margin-bottom:40px}
         .breath-ring{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;border:2px solid rgba(129,140,248,0.2);transition:all 4s ease-in-out}
         .breath-ring.inhale{transform:scale(1.3);border-color:var(--accent);box-shadow:0 0 60px var(--accent-glow)}
@@ -74,16 +56,12 @@
         .breath-modes{display:flex;gap:10px;margin-top:20px}
         .breath-mode{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:10px 18px;font-size:13px;color:var(--text2);cursor:pointer}
         .breath-mode.active{background:rgba(129,140,248,0.15);border-color:var(--accent);color:var(--text)}
-        
-        /* 发呆 */
         .daze-wrap{position:fixed;top:0;left:0;right:0;bottom:0}
         .daze-canvas{width:100%;height:100%}
         .daze-ui{position:absolute;bottom:80px;left:0;right:0;text-align:center}
         .daze-time{font-size:64px;font-weight:100;color:rgba(255,255,255,0.15)}
         .daze-hint{font-size:13px;color:rgba(255,255,255,0.1);margin-top:12px}
         .daze-close{position:absolute;top:20px;right:20px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer}
-        
-        /* 泡泡 */
         .bubble-area{position:absolute;top:70px;left:0;right:0;bottom:100px}
         .bubble{position:absolute;border-radius:50%;cursor:pointer;animation:bobble 3s ease-in-out infinite}
         .bubble-inner{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.95),rgba(129,140,248,0.4) 50%,rgba(99,102,241,0.2));box-shadow:inset 0 -15px 30px rgba(99,102,241,0.2),0 10px 30px rgba(0,0,0,0.2)}
@@ -94,8 +72,6 @@
         .bubble-footer{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,var(--bg))}
         .bubble-score{text-align:center;font-size:15px;color:var(--text)}
         .bubble-score span{color:var(--accent);font-weight:600;font-size:24px}
-        
-        /* ===== 撕纸现代化 ===== */
         .tear-wrap{width:100%;max-width:380px}
         .paper-picker{display:flex;gap:12px;margin-bottom:24px;justify-content:center}
         .paper-opt{width:52px;height:64px;border-radius:12px;border:2px solid transparent;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
@@ -106,7 +82,6 @@
         .paper-opt.p-sky{background:linear-gradient(180deg,#f0f9ff,#bae6fd)}
         .paper-opt.p-slate{background:linear-gradient(180deg,#334155,#1e293b)}
         .paper-opt.p-amber{background:linear-gradient(180deg,#d6d3d1,#a8a29e)}
-        
         .paper-card{width:100%;aspect-ratio:4/3;border-radius:16px;padding:24px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.4);transition:all .3s}
         .paper-card.p-cream{background:linear-gradient(180deg,#fef9e7,#fdf2c7);color:#78350f}
         .paper-card.p-rose{background:linear-gradient(180deg,#fdf2f8,#fbcfe8);color:#9d174d}
@@ -120,51 +95,27 @@
         .p-rose .paper-lines{background:repeating-linear-gradient(transparent,transparent 31px,#be185d 32px)}
         .p-sky .paper-lines{background:repeating-linear-gradient(transparent,transparent 31px,#0369a1 32px)}
         .p-slate .paper-lines{background:repeating-linear-gradient(transparent,transparent 31px,#64748b 32px)}
-        
         .tear-btns{display:flex;gap:12px;margin-top:28px;justify-content:center}
         .tear-btn{border:none;border-radius:100px;padding:16px 32px;font-size:15px;font-weight:500;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s}
         .tear-btn:active{transform:scale(0.96)}
         .btn-rip{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
         .btn-burn{background:linear-gradient(135deg,#f97316,#ea580c)}
-        
-        /* 销毁动效 */
         .destroy-scene{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.97);z-index:300;display:none;justify-content:center;align-items:center}
         .destroy-scene.active{display:flex;animation:fadeIn .4s}
         @keyframes fadeIn{from{opacity:0}to{opacity:1}}
         .destroy-stage{position:relative;width:300px;height:200px}
         .destroy-paper{width:100%;height:100%;border-radius:12px;padding:20px;font-size:14px;line-height:1.6;word-break:break-all;overflow:hidden;position:relative}
         .destroy-paper.ripping{animation:tearApart 2s forwards}
-        @keyframes tearApart{
-            0%{clip-path:inset(0);filter:brightness(1)}
-            20%{clip-path:inset(0);filter:brightness(1.1);transform:rotate(-1deg)}
-            40%{clip-path:polygon(0 0,55% 0,50% 30%,58% 60%,48% 100%,0 100%);transform:rotate(1deg)}
-            70%{clip-path:polygon(0 0,25% 0,20% 40%,30% 70%,15% 100%,0 100%);transform:translateX(-50px) rotate(-10deg);opacity:0.6}
-            100%{clip-path:polygon(0 0,0 0,0 100%,0 100%);transform:translateX(-100px) rotate(-20deg);opacity:0}
-        }
+        @keyframes tearApart{0%{clip-path:inset(0);filter:brightness(1)}20%{clip-path:inset(0);filter:brightness(1.1);transform:rotate(-1deg)}40%{clip-path:polygon(0 0,55% 0,50% 30%,58% 60%,48% 100%,0 100%);transform:rotate(1deg)}70%{clip-path:polygon(0 0,25% 0,20% 40%,30% 70%,15% 100%,0 100%);transform:translateX(-50px) rotate(-10deg);opacity:0.6}100%{clip-path:polygon(0 0,0 0,0 100%,0 100%);transform:translateX(-100px) rotate(-20deg);opacity:0}}
         .destroy-paper.burning{animation:burnAway 2.8s forwards}
-        @keyframes burnAway{
-            0%{filter:brightness(1) sepia(0)}
-            25%{filter:brightness(1.3) sepia(0.3)}
-            50%{filter:brightness(1.8) sepia(0.8);clip-path:polygon(0 100%,100% 100%,100% 50%,85% 40%,70% 55%,50% 35%,30% 50%,15% 35%,0 45%)}
-            75%{filter:brightness(2.5) sepia(1);clip-path:polygon(0 100%,100% 100%,100% 75%,80% 70%,60% 80%,40% 65%,20% 78%,0 70%)}
-            100%{filter:brightness(4);clip-path:polygon(0 100%,100% 100%,100% 100%,0 100%);opacity:0}
-        }
+        @keyframes burnAway{0%{filter:brightness(1) sepia(0)}25%{filter:brightness(1.3) sepia(0.3)}50%{filter:brightness(1.8) sepia(0.8);clip-path:polygon(0 100%,100% 100%,100% 50%,85% 40%,70% 55%,50% 35%,30% 50%,15% 35%,0 45%)}75%{filter:brightness(2.5) sepia(1);clip-path:polygon(0 100%,100% 100%,100% 75%,80% 70%,60% 80%,40% 65%,20% 78%,0 70%)}100%{filter:brightness(4);clip-path:polygon(0 100%,100% 100%,100% 100%,0 100%);opacity:0}}
         .particle-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible}
         .rip-particle{position:absolute;border-radius:3px;animation:particleFly 1.5s forwards}
-        @keyframes particleFly{
-            0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}
-            100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(0.3)}
-        }
+        @keyframes particleFly{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(0.3)}}
         .fire-particle{position:absolute;border-radius:50%;animation:fireRise 1s forwards}
-        @keyframes fireRise{
-            0%{opacity:1;transform:translateY(0) scale(1)}
-            100%{opacity:0;transform:translateY(-150px) scale(0)}
-        }
+        @keyframes fireRise{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-150px) scale(0)}}
         .ember{position:absolute;border-radius:50%;animation:emberFloat 3s forwards}
-        @keyframes emberFloat{
-            0%{opacity:0.7;transform:translateY(0) scale(1)}
-            100%{opacity:0;transform:translateY(calc(100vh - var(--start))) rotate(600deg) scale(0.5)}
-        }
+        @keyframes emberFloat{0%{opacity:0.7;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(calc(100vh - var(--start))) rotate(600deg) scale(0.5)}}
         .destroy-done{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;opacity:0;pointer-events:none}
         .destroy-done.show{opacity:1;pointer-events:auto;animation:doneIn .6s .8s both}
         @keyframes doneIn{from{opacity:0;transform:translate(-50%,-50%) scale(0.8)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
@@ -172,8 +123,6 @@
         .done-title{font-size:24px;font-weight:300;color:#fff;margin-bottom:8px}
         .done-sub{font-size:14px;color:var(--text2);margin-bottom:36px}
         .done-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:100px;padding:14px 36px;color:#fff;font-size:14px;cursor:pointer}
-        
-        /* 声音 */
         .sound-list{width:100%;max-width:380px}
         .sound-card{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:18px;margin-bottom:12px;transition:all .2s}
         .sound-card.active{background:rgba(129,140,248,0.08);border-color:rgba(129,140,248,0.25)}
@@ -195,16 +144,14 @@
         .timer-opt{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:10px 18px;font-size:13px;color:var(--text2);cursor:pointer}
         .timer-opt.active{background:rgba(129,140,248,0.15);border-color:var(--accent);color:var(--text)}
         .timer-info{text-align:center;margin-top:12px;font-size:13px;color:var(--text3)}
-        
-        /* 触感 */
-        .touch-picker{display:flex;gap:10px;margin-bottom:24px}
-        .touch-opt{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:12px 20px;font-size:14px;color:var(--text2);cursor:pointer}
+        .touch-picker{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;justify-content:center}
+        .touch-opt{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:10px 16px;font-size:13px;color:var(--text2);cursor:pointer}
         .touch-opt.active{background:rgba(129,140,248,0.15);border-color:var(--accent);color:var(--text)}
         .touch-canvas{width:100%;max-width:340px;aspect-ratio:1;border-radius:24px;overflow:hidden;position:relative}
         .touch-tip{text-align:center;font-size:13px;color:var(--text3);margin-top:18px;line-height:1.6}
         .ball-scene{width:100%;height:100%;background:radial-gradient(circle at 50% 60%,#1e1b4b,#0a0a0f);display:flex;align-items:center;justify-content:center;position:relative}
-        .stress-ball{width:65%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fda4af,#fb7185 35%,#e11d48 70%,#9f1239);box-shadow:0 40px 80px rgba(0,0,0,0.5),inset 0 -25px 50px rgba(0,0,0,0.3),inset 0 15px 40px rgba(255,255,255,0.15);cursor:pointer;transition:none}
-        .ball-shadow{position:absolute;bottom:40px;width:55%;height:15px;background:radial-gradient(ellipse,rgba(0,0,0,0.5),transparent 70%);border-radius:50%;transition:all .3s}
+        .stress-ball{width:55%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fda4af,#fb7185 35%,#e11d48 70%,#9f1239);box-shadow:0 40px 80px rgba(0,0,0,0.5),inset 0 -25px 50px rgba(0,0,0,0.3),inset 0 15px 40px rgba(255,255,255,0.15);cursor:pointer;transition:none;transform-origin:center center}
+        .ball-shadow{position:absolute;bottom:40px;width:45%;height:12px;background:radial-gradient(ellipse,rgba(0,0,0,0.5),transparent 70%);border-radius:50%;transition:all .1s}
         .ball-hint{position:absolute;bottom:24px;font-size:13px;color:var(--text3)}
         .sand-scene{width:100%;height:100%;position:relative}
         .sand-cv{width:100%;height:100%;touch-action:none}
@@ -219,7 +166,29 @@
         .zen-tab{background:rgba(0,0,0,0.06);border:none;border-radius:8px;padding:8px 14px;font-size:12px;color:#666;cursor:pointer}
         .zen-tab.active{background:var(--accent);color:#fff}
         .zen-status{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);font-size:12px;color:#999}
-        
+        /* 打沙袋样式 */
+        .bag-scene{width:100%;height:100%;background:linear-gradient(180deg,#1a1a2e 0%,#16213e 100%);position:relative;overflow:hidden}
+        .bag-ceiling{position:absolute;top:0;left:0;right:0;height:30px;background:linear-gradient(180deg,#0f0f1a,#1a1a2e)}
+        .bag-chain{position:absolute;top:30px;left:50%;width:4px;height:40px;background:linear-gradient(90deg,#4a4a4a,#6a6a6a,#4a4a4a);transform:translateX(-50%)}
+        .punching-bag{position:absolute;top:70px;left:50%;width:90px;height:160px;transform:translateX(-50%);transform-origin:top center;transition:transform 0.1s}
+        .bag-top{width:100%;height:25px;background:radial-gradient(ellipse at center,#8b0000,#5c0000);border-radius:50% 50% 0 0}
+        .bag-body{width:100%;height:110px;background:linear-gradient(90deg,#5c0000 0%,#8b0000 30%,#a00000 50%,#8b0000 70%,#5c0000 100%);position:relative}
+        .bag-body::before{content:'';position:absolute;top:20px;left:50%;transform:translateX(-50%);width:60%;height:3px;background:rgba(255,255,255,0.1);border-radius:2px}
+        .bag-body::after{content:'';position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:60%;height:3px;background:rgba(255,255,255,0.1);border-radius:2px}
+        .bag-bottom{width:100%;height:25px;background:radial-gradient(ellipse at center,#8b0000,#5c0000);border-radius:0 0 50% 50%}
+        .bag-highlight{position:absolute;top:30px;left:15px;width:15px;height:80px;background:linear-gradient(180deg,rgba(255,255,255,0.15),transparent);border-radius:10px}
+        .boxer{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);text-align:center}
+        .boxer-body{font-size:80px;line-height:1;transition:transform 0.08s}
+        .boxer-body.punch-left{transform:translateX(-15px) rotate(-8deg)}
+        .boxer-body.punch-right{transform:translateX(15px) rotate(8deg)}
+        .punch-effect{position:absolute;pointer-events:none;font-size:32px;animation:punchPop 0.4s forwards;opacity:0}
+        @keyframes punchPop{0%{opacity:1;transform:scale(0.5)}50%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(1.5) translateY(-20px)}}
+        .bag-stats{position:absolute;bottom:20px;left:0;right:0;text-align:center}
+        .bag-count{font-size:28px;font-weight:600;color:var(--accent)}
+        .bag-label{font-size:12px;color:var(--text3);margin-top:4px}
+        .combo-display{position:absolute;top:100px;left:50%;transform:translateX(-50%);font-size:20px;font-weight:700;color:#fbbf24;opacity:0;transition:opacity 0.2s}
+        .combo-display.show{opacity:1;animation:comboPulse 0.3s}
+        @keyframes comboPulse{0%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.2)}100%{transform:translateX(-50%) scale(1)}}
         .footer{text-align:center;padding:40px 20px;font-size:12px;color:var(--text3)}
     </style>
 </head>
@@ -251,7 +220,7 @@
                 <div class="module" onclick="go('bubble')"><div class="module-icon">🫧</div><div class="module-name">泡泡</div><div class="module-desc">捏爆解压</div></div>
                 <div class="module" onclick="go('tear')"><div class="module-icon">📄</div><div class="module-name">撕纸</div><div class="module-desc">写下烦恼销毁</div></div>
                 <div class="module" onclick="go('sound')"><div class="module-icon">🎵</div><div class="module-name">声音</div><div class="module-desc">自然白噪音</div></div>
-                <div class="module" onclick="go('touch')"><div class="module-icon">🖐️</div><div class="module-name">触感</div><div class="module-desc">解压球/沙盘</div></div>
+                <div class="module" onclick="go('touch')"><div class="module-icon">🖐️</div><div class="module-name">触感</div><div class="module-desc">解压球/沙袋</div></div>
             </div>
             <div class="footer">每个功能都有科学依据</div>
         </div>
@@ -338,6 +307,7 @@
             <div class="science"><div class="science-title">🔬 原理</div><div class="science-text">重复手部动作激活程序性记忆，绕过焦虑相关前额叶，进入心流。</div></div>
             <div class="touch-picker">
                 <button class="touch-opt active" onclick="setTouch('ball')">🔮 解压球</button>
+                <button class="touch-opt" onclick="setTouch('bag')">🥊 打沙袋</button>
                 <button class="touch-opt" onclick="setTouch('sand')">🏖️ 沙盘</button>
                 <button class="touch-opt" onclick="setTouch('zen')">🌀 禅绕</button>
             </div>
@@ -347,25 +317,20 @@
     </div>
 
 <script>
-// 音频上下文
 let audioCtx=null;
 function getAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}
-
-// 音效生成
 function playRipSound(){const ctx=getAudio(),dur=0.6;const noise=ctx.createBufferSource(),buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<buf.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(buf.length*0.2))*(1+Math.random()*0.5);noise.buffer=buf;const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=800;const g=ctx.createGain();g.gain.setValueAtTime(0.4,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+dur);noise.connect(hp);hp.connect(g);g.connect(ctx.destination);noise.start()}
 function playBurnSound(){const ctx=getAudio(),dur=2.5;const noise=ctx.createBufferSource(),buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<buf.length;i++){let env=Math.exp(-i/(buf.length*0.5));d[i]=(Math.random()*2-1)*env*0.3;if(Math.random()<0.01)d[i]+=Math.random()*0.5*env}noise.buffer=buf;const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1500;const g=ctx.createGain();g.gain.setValueAtTime(0.5,ctx.currentTime);noise.connect(lp);lp.connect(g);g.connect(ctx.destination);noise.start()}
 function playDoneSound(){const ctx=getAudio();[523.25,659.25,783.99].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,ctx.currentTime+i*0.15);g.gain.linearRampToValueAtTime(0.15,ctx.currentTime+i*0.15+0.05);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+i*0.15+0.4);o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+i*0.15);o.stop(ctx.currentTime+i*0.15+0.5)})}
 function playPopSound(){const ctx=getAudio(),o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(900+Math.random()*400,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(150,ctx.currentTime+0.1);g.gain.setValueAtTime(0.3,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.1);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.1)}
-
+function playPunchSound(){const ctx=getAudio(),dur=0.15;const noise=ctx.createBufferSource(),buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<buf.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(buf.length*0.08));noise.buffer=buf;const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=400;const g=ctx.createGain();g.gain.setValueAtTime(0.6,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+dur);noise.connect(lp);lp.connect(g);g.connect(ctx.destination);noise.start()}
 function vibrate(p){if(navigator.vibrate)navigator.vibrate(p)}
 
-// 导航
-const moodMap={anxious:[{n:'🫁 呼吸',p:'breath'},{n:'📻 白噪音',p:'sound'}],sad:[{n:'🌧️ 雨声',p:'sound'},{n:'🌀 发呆',p:'daze'}],angry:[{n:'🫧 泡泡',p:'bubble'},{n:'📄 撕纸',p:'tear'}],tired:[{n:'🔥 篝火',p:'sound'},{n:'🌀 发呆',p:'daze'}],meh:[{n:'🫁 呼吸',p:'breath'},{n:'🖐️ 触感',p:'touch'}]};
+const moodMap={anxious:[{n:'🫁 呼吸',p:'breath'},{n:'📻 白噪音',p:'sound'}],sad:[{n:'🌧️ 雨声',p:'sound'},{n:'🌀 发呆',p:'daze'}],angry:[{n:'🥊 打沙袋',p:'touch'},{n:'📄 撕纸',p:'tear'}],tired:[{n:'🔥 篝火',p:'sound'},{n:'🌀 发呆',p:'daze'}],meh:[{n:'🫁 呼吸',p:'breath'},{n:'🖐️ 触感',p:'touch'}]};
 function pickMood(btn,mood){document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');vibrate(20);const rec=document.getElementById('recommend'),btns=document.getElementById('recommendBtns');btns.innerHTML=moodMap[mood].map(m=>`<button class="recommend-btn" onclick="go('${m.p}')">${m.n}</button>`).join('');rec.classList.add('show')}
 function go(p){document.getElementById(p+'-page').classList.add('active');document.getElementById('home').style.display='none';document.getElementById('pageTitle').textContent=p;if(p==='bubble')initBubbles();if(p==='daze')initDaze();if(p==='touch')setTouch('ball');vibrate(20)}
 function back(){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('home').style.display='block';stopBreath();stopDaze();stopSounds();stopBall()}
 
-// 呼吸
 let breathInt=null,bPhase=0,bCount=0,bTimer=0,bCfg={in:4,hold:7,out:8,rounds:4};
 function setMode(btn,m){document.querySelectorAll('.breath-mode').forEach(b=>b.classList.remove('active'));btn.classList.add('active');bCfg=m==='478'?{in:4,hold:7,out:8,rounds:4}:{in:4,hold:4,out:4,hold2:4,rounds:4};document.getElementById('breathNum').textContent=bCfg.in}
 function toggleBreath(){breathInt?stopBreath():startBreath()}
@@ -374,19 +339,16 @@ function updateBreath(){document.getElementById('breathNum').textContent=bTimer;
 function stopBreath(){if(breathInt){clearInterval(breathInt);breathInt=null}document.getElementById('breathBtn').textContent='开始';document.getElementById('breathStatus').textContent='准备好了吗？';document.getElementById('breathProgress').textContent='';document.getElementById('breathRing').className='breath-ring';document.getElementById('breathNum').textContent=bCfg.in}
 function doneBreath(){stopBreath();document.getElementById('breathStatus').textContent='✨ 完成';vibrate([80,40,80])}
 
-// 发呆
 let dazeInt=null,dazeT=180;
 function initDaze(){const c=document.getElementById('dazeCanvas'),ctx=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;dazeT=180;updDaze();const blobs=[];for(let i=0;i<5;i++)blobs.push({x:Math.random()*c.width,y:Math.random()*c.height,r:100+Math.random()*80,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,hue:250+Math.random()*50});(function draw(){ctx.fillStyle='rgba(10,10,15,0.02)';ctx.fillRect(0,0,c.width,c.height);blobs.forEach(b=>{b.x+=b.vx;b.y+=b.vy;if(b.x<0||b.x>c.width)b.vx*=-1;if(b.y<0||b.y>c.height)b.vy*=-1;const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);g.addColorStop(0,`hsla(${b.hue},70%,55%,0.25)`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill()});requestAnimationFrame(draw)})();dazeInt=setInterval(()=>{dazeT--;updDaze();if(dazeT<=0)back()},1000)}
 function updDaze(){document.getElementById('dazeTime').textContent=`${Math.floor(dazeT/60)}:${(dazeT%60).toString().padStart(2,'0')}`}
 function stopDaze(){if(dazeInt){clearInterval(dazeInt);dazeInt=null}}
 
-// 泡泡
 let bubbleCnt=0;
 function initBubbles(){const area=document.getElementById('bubbleArea');area.innerHTML='';bubbleCnt=0;document.getElementById('bubbleScore').textContent='0';for(let i=0;i<12;i++)makeBubble()}
 function makeBubble(){const area=document.getElementById('bubbleArea'),b=document.createElement('div');b.className='bubble';const s=55+Math.random()*40;b.innerHTML='<div class="bubble-inner"><div class="bubble-shine"></div></div>';b.style.cssText=`width:${s}px;height:${s}px;left:${10+Math.random()*(area.offsetWidth-s-20)}px;top:${10+Math.random()*(area.offsetHeight-s-20)}px;animation-delay:${Math.random()*2}s`;b.onclick=b.ontouchstart=e=>{e.preventDefault();popIt(b)};area.appendChild(b)}
 function popIt(b){if(b.classList.contains('pop'))return;playPopSound();vibrate([15,10,25]);b.classList.add('pop');bubbleCnt++;document.getElementById('bubbleScore').textContent=bubbleCnt;setTimeout(()=>{b.remove();makeBubble();if(Math.random()>0.4)makeBubble()},200)}
 
-// 撕纸
 let paperStyle='cream';
 function setPaper(s){paperStyle=s;document.querySelectorAll('.paper-opt').forEach(o=>o.classList.remove('active'));document.querySelector('.p-'+s).classList.add('active');document.getElementById('paperCard').className='paper-card p-'+s}
 function destroy(mode){const text=document.getElementById('paperText').value;if(!text.trim()){vibrate(100);return}vibrate([40,20,40,20,80]);const scene=document.getElementById('destroyScene'),paper=document.getElementById('destroyPaper'),done=document.getElementById('destroyDone'),layer=document.getElementById('particleLayer');paper.className='destroy-paper p-'+paperStyle;paper.textContent=text.substring(0,80)+(text.length>80?'...':'');done.classList.remove('show');layer.innerHTML='';scene.classList.add('active');setTimeout(()=>{if(mode==='rip'){paper.classList.add('ripping');playRipSound();createRipParticles();document.getElementById('doneIcon').textContent='✂️';document.getElementById('doneTitle').textContent='碎片已飘散'}else{paper.classList.add('burning');playBurnSound();createFireParticles();createEmbers();document.getElementById('doneIcon').textContent='🔥';document.getElementById('doneTitle').textContent='灰飞烟灭'}setTimeout(()=>{playDoneSound();done.classList.add('show')},mode==='rip'?1800:2500)},100)}
@@ -395,26 +357,45 @@ function createFireParticles(){const layer=document.getElementById('particleLaye
 function createEmbers(){const layer=document.getElementById('particleLayer');for(let i=0;i<25;i++){const e=document.createElement('div');e.className='ember';const s=2+Math.random()*5;const startY=Math.random()*200;e.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${startY}px;background:#4b5563;--start:${startY}px;animation-delay:${1+Math.random()*2}s`;layer.appendChild(e)}}
 function closeDest(){document.getElementById('destroyScene').classList.remove('active');document.getElementById('destroyPaper').className='destroy-paper';document.getElementById('paperText').value=''}
 
-// 声音
 let sndCtx=null;const sndNodes={};let masterV=0.5,sndTimer=null,sndEnd=0;
 function getSnd(){if(!sndCtx)sndCtx=new(window.AudioContext||window.webkitAudioContext)();if(sndCtx.state==='suspended')sndCtx.resume();return sndCtx}
 function makeSndBuf(type){const ctx=getSnd(),sr=ctx.sampleRate,len=sr*4,buf=ctx.createBuffer(2,len,sr),L=buf.getChannelData(0),R=buf.getChannelData(1);if(type==='white')for(let i=0;i<len;i++)L[i]=R[i]=(Math.random()*2-1)*0.5;else if(type==='rain'){let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;b0=0.99886*b0+w*0.0555;b1=0.99332*b1+w*0.0751;b2=0.969*b2+w*0.1539;b3=0.8665*b3+w*0.3105;b4=0.55*b4+w*0.533;b5=-0.7616*b5-w*0.0169;const p=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.06;b6=w*0.116;L[i]=p;R[i]=p;if(Math.random()<0.001)for(let j=0;j<150&&i+j<len;j++){L[i+j]+=0.35*Math.exp(-j/20)*(Math.random()-0.5)}}}else if(type==='wave')for(let i=0;i<len;i++){const phase=((i/sr)%8)/8;const env=phase<0.5?Math.sin(phase*Math.PI):Math.sin(phase*Math.PI)*0.3;L[i]=R[i]=(Math.random()*2-1)*0.3*env}else if(type==='fire')for(let i=0;i<len;i++){let n=(Math.random()*2-1)*0.15;if(Math.random()<0.005)for(let j=0;j<300&&i+j<len;j++)L[i+j]+=0.35*Math.exp(-j/50)*Math.sin(j/sr*300*Math.PI*2);L[i]+=n;R[i]=L[i]*(0.85+Math.random()*0.3)}return buf}
-function toggleSnd(el){const t=el.dataset.sound;if(el.classList.contains('active')){el.classList.remove('active');if(sndNodes[t]){sndNodes[t].src.stop();delete sndNodes[t]}}else{el.classList.add('active');const ctx=getSnd(),buf=makeSndBuf(t),src=ctx.createBufferSource(),gain=ctx.createGain();src.buffer=buf;src.loop=true;const slider=el.querySelector('.vol-slider');gain.gain.value=masterV*(slider?slider.value/100:0.7);src.connect(gain);gain.connect(ctx.destination);src.start();sndNodes[t]={src,gain,v:slider?slider.value/100:0.7}}}
+function toggleSnd(el){const t=el.dataset.sound;if(el.classList.contains('active')){el.classList.remove('active');if(sndNodes[t]){sndNodes[t].src.stop();delete sndNodes[t]}}else{el.classList.add('active');const ctx=getSnd(),buf=makeSndBuf(t),src=ctx.createBufferSource(),gain=ctx.createGain();src.buffer=buf;src.loop=true;const slider=el.querySelector('.vol-slider');gain.gain.value=master
+V*(slider?slider.value/100:0.7);src.connect(gain);gain.connect(ctx.destination);src.start();sndNodes[t]={src,gain,v:slider?slider.value/100:0.7}}}
 function setSndVol(slider){const el=slider.closest('.sound-card'),t=el.dataset.sound;if(sndNodes[t]){sndNodes[t].v=slider.value/100;sndNodes[t].gain.gain.value=masterV*sndNodes[t].v}}
 function setMaster(v){masterV=v/100;document.getElementById('masterVal').textContent=v+'%';Object.values(sndNodes).forEach(n=>n.gain.gain.value=masterV*n.v)}
 function setTimer(btn,min){document.querySelectorAll('.timer-opt').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(sndTimer)clearInterval(sndTimer);sndEnd=Date.now()+min*60*1000;updTimer();sndTimer=setInterval(()=>{if(Date.now()>=sndEnd){stopSounds();document.getElementById('timerInfo').textContent='已停止'}else updTimer()},1000)}
 function updTimer(){const left=Math.max(0,sndEnd-Date.now()),m=Math.floor(left/60000),s=Math.floor((left%60000)/1000);document.getElementById('timerInfo').textContent=`${m}:${s.toString().padStart(2,'0')} 后停止`}
 function stopSounds(){Object.keys(sndNodes).forEach(k=>{sndNodes[k].src.stop();delete sndNodes[k]});document.querySelectorAll('.sound-card').forEach(el=>el.classList.remove('active'));if(sndTimer){clearInterval(sndTimer);sndTimer=null}document.getElementById('timerInfo').textContent=''}
 
-// 触感
 let ballInt=null,ballRec=null,ballPress=0;
-function setTouch(m){document.querySelectorAll('.touch-opt').forEach(o=>o.classList.remove('active'));document.querySelector(`.touch-opt:nth-child(${m==='ball'?1:m==='sand'?2:3})`).classList.add('active');stopBall();const cv=document.getElementById('touchCanvas'),tip=document.getElementById('touchTip');if(m==='ball'){cv.innerHTML='<div class="ball-scene"><div class="stress-ball" id="ball"></div><div class="ball-shadow" id="ballShd"></div><div class="ball-hint" id="ballHint">按住不放</div></div>';tip.textContent='按住球体，感受它在指尖变形';initBall()}else if(m==='sand'){cv.innerHTML='<div class="sand-scene"><canvas class="sand-cv" id="sandCv"></canvas><div class="sand-overlay" id="sandOvl"><div class="sand-icon">🏖️</div><div class="sand-text">用手指在沙上作画</div></div><button class="sand-clear" onclick="clearSand()">🔄</button></div>';tip.textContent='画完摇一摇清空';initSand()}else{cv.innerHTML='<div class="zen-scene"><canvas class="zen-cv" id="zenCv"></canvas><div class="zen-tabs"><button class="zen-tab active" onclick="setZen(\'spiral\')">螺旋</button><button class="zen-tab" onclick="setZen(\'wave\')">波浪</button><button class="zen-tab" onclick="setZen(\'circle\')">圆环</button></div><div class="zen-status" id="zenSt">跟随引导线</div></div>';tip.textContent='跟随灰色引导线描绘';initZen()}}
-function initBall(){const ball=document.getElementById('ball'),shd=document.getElementById('ballShd'),hint=document.getElementById('ballHint');ballPress=0;function down(e){e.preventDefault();hint.style.opacity='1';if(ballRec){clearInterval(ballRec);ballRec=null}ballInt=setInterval(()=>{if(ballPress<100)ballPress+=2;updBall();if(ballPress%10===0)vibrate(10+ballPress/5)},50)}function up(){if(ballInt){clearInterval(ballInt);ballInt=null}vibrate([25,15,40]);ballRec=setInterval(()=>{if(ballPress>0){ballPress-=1.5;if(ballPress<0)ballPress=0;updBall()}else{clearInterval(ballRec);ballRec=null;hint.style.opacity='0.5'}},25)}function updBall(){const sc=1-ballPress*0.003,sk=ballPress*0.12,br=50-ballPress*0.12;ball.style.transform=`scale(${sc},${sc*0.85+0.15}) skewX(${sk}deg)`;ball.style.borderRadius=`${br}% ${br}% ${52+ballPress*0.15}% ${52+ballPress*0.15}%`;shd.style.width=(55+ballPress*0.2)+'%';const msgs=['按住不放','继续...','感受压力释放','很好...','让压力流走','🎉 太棒了'];hint.textContent=msgs[Math.min(Math.floor(ballPress/18),5)]}ball.onmousedown=ball.ontouchstart=down;ball.onmouseup=ball.onmouseleave=ball.ontouchend=ball.ontouchcancel=up}
+function setTouch(m){document.querySelectorAll('.touch-opt').forEach(o=>o.classList.remove('active'));document.querySelector(`.touch-opt:nth-child(${m==='ball'?1:m==='bag'?2:m==='sand'?3:4})`).classList.add('active');stopBall();const cv=document.getElementById('touchCanvas'),tip=document.getElementById('touchTip');
+if(m==='ball'){cv.innerHTML='<div class="ball-scene"><div class="stress-ball" id="ball"></div><div class="ball-shadow" id="ballShd"></div><div class="ball-hint" id="ballHint">按住不放</div></div>';tip.textContent='按住球体，看它被压扁';initBall()}
+else if(m==='bag'){cv.innerHTML='<div class="bag-scene"><div class="bag-ceiling"></div><div class="bag-chain"></div><div class="punching-bag" id="punchBag"><div class="bag-top"></div><div class="bag-body"><div class="bag-highlight"></div></div><div class="bag-bottom"></div></div><div class="combo-display" id="comboDisp">COMBO x5</div><div class="boxer"><div class="boxer-body" id="boxerBody">🥊</div></div><div class="bag-stats"><div class="bag-count" id="punchCount">0</div><div class="bag-label">次出拳</div></div></div>';tip.textContent='点击屏幕挥拳！';initBag()}
+else if(m==='sand'){cv.innerHTML='<div class="sand-scene"><canvas class="sand-cv" id="sandCv"></canvas><div class="sand-overlay" id="sandOvl"><div class="sand-icon">🏖️</div><div class="sand-text">用手指在沙上作画</div></div><button class="sand-clear" onclick="clearSand()">🔄</button></div>';tip.textContent='画完摇一摇清空';initSand()}
+else{cv.innerHTML='<div class="zen-scene"><canvas class="zen-cv" id="zenCv"></canvas><div class="zen-tabs"><button class="zen-tab active" onclick="setZen(\'spiral\')">螺旋</button><button class="zen-tab" onclick="setZen(\'wave\')">波浪</button><button class="zen-tab" onclick="setZen(\'circle\')">圆环</button></div><div class="zen-status" id="zenSt">跟随引导线</div></div>';tip.textContent='跟随灰色引导线描绘';initZen()}}
+
+function initBall(){const ball=document.getElementById('ball'),shd=document.getElementById('ballShd'),hint=document.getElementById('ballHint');ballPress=0;
+function down(e){e.preventDefault();hint.style.opacity='1';if(ballRec){clearInterval(ballRec);ballRec=null}ballInt=setInterval(()=>{if(ballPress<100)ballPress+=3;updBall();if(ballPress%10===0)vibrate(10+ballPress/4)},40)}
+function up(){if(ballInt){clearInterval(ballInt);ballInt=null}vibrate([30,20,50]);ballRec=setInterval(()=>{if(ballPress>0){ballPress-=2;if(ballPress<0)ballPress=0;updBall()}else{clearInterval(ballRec);ballRec=null;hint.style.opacity='0.5'}},20)}
+function updBall(){const p=ballPress/100;const scX=1-p*0.35;const scY=1-p*0.55;const skew=p*15;ball.style.transform=`scale(${scX},${scY}) skewX(${skew}deg)`;ball.style.borderRadius=`${50-p*15}% ${50-p*15}% ${50+p*10}% ${50+p*10}%`;shd.style.width=(45+p*25)+'%';shd.style.height=(12+p*6)+'px';shd.style.bottom=(40-p*15)+'px';const msgs=['按住不放','用力...','继续压！','快扁了...','再用力！','💥 爆发！'];hint.textContent=msgs[Math.min(Math.floor(ballPress/18),5)]}
+ball.onmousedown=ball.ontouchstart=down;ball.onmouseup=ball.onmouseleave=ball.ontouchend=ball.ontouchcancel=up}
+
+let punchCnt=0,combo=0,lastPunch=0;
+function initBag(){punchCnt=0;combo=0;const scene=document.querySelector('.bag-scene');scene.onclick=scene.ontouchstart=e=>{e.preventDefault();doPunch()}}
+function doPunch(){const bag=document.getElementById('punchBag'),boxer=document.getElementById('boxerBody'),now=Date.now();playPunchSound();vibrate([40,15,60]);punchCnt++;document.getElementById('punchCount').textContent=punchCnt;
+const isLeft=punchCnt%2===1;boxer.className='boxer-body '+(isLeft?'punch-left':'punch-right');setTimeout(()=>boxer.className='boxer-body',80);
+const swing=isLeft?-18:18;bag.style.transform=`translateX(-50%) rotate(${swing}deg)`;setTimeout(()=>bag.style.transform='translateX(-50%) rotate(0deg)',150);
+if(now-lastPunch<600){combo++;if(combo>=3){const cd=document.getElementById('comboDisp');cd.textContent='COMBO x'+combo;cd.classList.add('show');setTimeout(()=>cd.classList.remove('show'),500)}}else{combo=1}lastPunch=now;
+const eff=document.createElement('div');eff.className='punch-effect';eff.textContent=['💥','💢','⚡','🔥'][Math.floor(Math.random()*4)];eff.style.cssText=`top:${120+Math.random()*60}px;left:${isLeft?'30%':'60%'}`;document.querySelector('.bag-scene').appendChild(eff);setTimeout(()=>eff.remove(),400)}
+
 function stopBall(){if(ballInt){clearInterval(ballInt);ballInt=null}if(ballRec){clearInterval(ballRec);ballRec=null}}
+
 let sandCtx=null,sandDraw=false,sandLX=0,sandLY=0;
 function initSand(){const cv=document.getElementById('sandCv'),ctx=cv.getContext('2d');cv.width=cv.offsetWidth*2;cv.height=cv.offsetHeight*2;ctx.scale(2,2);drawSandBg(ctx,cv.offsetWidth,cv.offsetHeight);sandCtx=ctx;function pos(e){const r=cv.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top}}cv.onmousedown=cv.ontouchstart=e=>{e.preventDefault();sandDraw=true;const p=pos(e);sandLX=p.x;sandLY=p.y;document.getElementById('sandOvl').classList.add('hidden')};cv.onmousemove=cv.ontouchmove=e=>{if(!sandDraw)return;e.preventDefault();const p=pos(e);sandCtx.strokeStyle='#78350f';sandCtx.lineWidth=12+Math.random()*6;sandCtx.lineCap='round';sandCtx.beginPath();sandCtx.moveTo(sandLX,sandLY);sandCtx.lineTo(p.x,p.y);sandCtx.stroke();sandLX=p.x;sandLY=p.y;vibrate(3)};cv.onmouseup=cv.ontouchend=cv.ontouchcancel=()=>sandDraw=false}
 function drawSandBg(ctx,w,h){const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#d4a574');g.addColorStop(1,'#c49a6c');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);for(let i=0;i<2500;i++){ctx.fillStyle=`rgba(${180+Math.random()*40},${140+Math.random()*30},${90+Math.random()*20},${0.25+Math.random()*0.3})`;ctx.fillRect(Math.random()*w,Math.random()*h,1,1)}}
 function clearSand(){vibrate([30,20,30,20,50]);const cv=document.getElementById('sandCv');if(sandCtx){drawSandBg(sandCtx,cv.offsetWidth,cv.offsetHeight);document.getElementById('sandOvl').classList.remove('hidden')}}
+
 let zenCtx=null,zenDraw=false,zenLX=0,zenLY=0,zenPat='spiral',zenStrokes=0;
 function initZen(){const cv=document.getElementById('zenCv'),ctx=cv.getContext('2d');cv.width=cv.offsetWidth*2;cv.height=cv.offsetHeight*2;ctx.scale(2,2);ctx.fillStyle='#faf8f5';ctx.fillRect(0,0,cv.offsetWidth,cv.offsetHeight);zenCtx=ctx;zenStrokes=0;drawZenGuide();function pos(e){const r=cv.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top}}cv.onmousedown=cv.ontouchstart=e=>{e.preventDefault();zenDraw=true;const p=pos(e);zenLX=p.x;zenLY=p.y};cv.onmousemove=cv.ontouchmove=e=>{if(!zenDraw)return;e.preventDefault();const p=pos(e);zenCtx.strokeStyle='#1f2937';zenCtx.lineWidth=2;zenCtx.lineCap='round';zenCtx.beginPath();zenCtx.moveTo(zenLX,zenLY);zenCtx.lineTo(p.x,p.y);zenCtx.stroke();zenLX=p.x;zenLY=p.y;zenStrokes++;if(zenStrokes%20===0)vibrate(4);updZen()};cv.onmouseup=cv.ontouchend=cv.ontouchcancel=()=>zenDraw=false}
 function setZen(p){zenPat=p;document.querySelectorAll('.zen-tab').forEach(t=>t.classList.remove('active'));event.target.classList.add('active');const cv=document.getElementById('zenCv');zenCtx.fillStyle='#faf8f5';zenCtx.fillRect(0,0,cv.offsetWidth,cv.offsetHeight);zenStrokes=0;drawZenGuide();document.getElementById('zenSt').textContent='跟随引导线'}
