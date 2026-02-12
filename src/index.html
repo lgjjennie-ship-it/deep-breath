@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>深呼吸 - 3分钟解压</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #f5f5f5;
+        }
+        .container { max-width: 420px; margin: 0 auto; padding: 20px; min-height: 100vh; }
+        .header { text-align: center; padding: 30px 0 20px; }
+        .header h1 { font-size: 28px; font-weight: 300; letter-spacing: 4px; margin-bottom: 8px; }
+        .header p { font-size: 14px; color: #7f8fa6; }
+
+        .mood-section { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 24px; margin-bottom: 24px; }
+        .mood-title { text-align: center; font-size: 16px; margin-bottom: 20px; color: #a29bfe; }
+        .mood-options { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+        .mood-btn {
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 12px 16px; font-size: 14px; color: #f5f5f5;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .mood-btn:active { background: rgba(162, 155, 254, 0.2); border-color: #a29bfe; transform: scale(1.05); }
+
+        .modules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .module-card {
+            background: rgba(255,255,255,0.06); border-radius: 16px; padding: 24px 12px;
+            text-align: center; cursor: pointer; transition: all 0.3s ease; border: 1px solid transparent;
+        }
+        .module-card:active { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
+        .module-icon { font-size: 32px; margin-bottom: 12px; }
+        .module-name { font-size: 14px; color: #ddd; }
+        .module-card.disabled { opacity: 0.4; pointer-events: none; }
+
+        .page {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            z-index: 100; padding: 20px; overflow: hidden;
+        }
+        .page.active { display: flex; flex-direction: column; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 20px; }
+        .back-btn {
+            background: rgba(255,255,255,0.1); border: none; border-radius: 50%;
+            width: 40px; height: 40px; color: #f5f5f5; font-size: 20px; cursor: pointer;
+        }
+        .page-title { font-size: 18px; font-weight: 400; }
+        .page-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+        /* 呼吸 */
+        .breath-circle-container { position: relative; width: 220px; height: 220px; margin-bottom: 40px; }
+        .breath-circle {
+            width: 100%; height: 100%; border-radius: 50%;
+            background: radial-gradient(circle, rgba(162, 155, 254, 0.4) 0%, rgba(162, 155, 254, 0.1) 70%);
+            box-shadow: 0 0 60px rgba(162, 155, 254, 0.3);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 4s ease-in-out;
+        }
+        .breath-circle.inhale { transform: scale(1.3); }
+        .breath-circle.exhale { transform: scale(0.8); }
+        .breath-circle.hold { transform: scale(1.3); }
+        .breath-timer { font-size: 48px; font-weight: 200; }
+        .breath-status { margin-top: 20px; font-size: 16px; color: #7f8fa6; }
+        .breath-progress { margin-top: 10px; font-size: 14px; color: #555; }
+        .start-btn {
+            margin-top: 40px; background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            border: none; border-radius: 30px; padding: 16px 48px; font-size: 16px; color: #fff; cursor: pointer;
+        }
+
+        /* 泡泡 */
+        .bubble-container { position: absolute; top: 70px; left: 0; right: 0; bottom: 60px; overflow: hidden; }
+        .bubble {
+            position: absolute; border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(162, 155, 254, 0.4));
+            cursor: pointer; animation: float 3s ease-in-out infinite;
+            box-shadow: inset 0 -5px 20px rgba(162, 155, 254, 0.3);
+        }
+        .bubble::before {
+            content: ''; position: absolute; top: 15%; left: 20%; width: 30%; height: 20%;
+            background: rgba(255,255,255,0.6); border-radius: 50%;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes pop { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+        .bubble.pop { animation: pop 0.15s ease-out forwards; }
+        .bubble-score { position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; font-size: 14px; color: #7f8fa6; }
+
+        /* 声音 */
+        .sound-list { width: 100%; max-width: 360px; }
+        .sound-item {
+            background: rgba(255,255,255,0.06); border-radius: 16px; padding: 20px; margin-bottom: 16px;
+            display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+            transition: all 0.3s; border: 1px solid transparent;
+        }
+        .sound-item.active { background: rgba(255,255,255,0.1); border-color: #a29bfe; }
+        .sound-info { display: flex; align-items: center; gap: 16px; }
+        .sound-icon { font-size: 28px; }
+        .sound-name { font-size: 16px; }
+        .sound-toggle {
+            width: 50px; height: 28px; background: rgba(255,255,255,0.1);
+            border-radius: 14px; position: relative; transition: all 0.3s;
+        }
+        .sound-toggle::after {
+            content: ''; position: absolute; top: 4px; left: 4px; width: 20px; height: 20px;
+            background: #fff; border-radius: 50%; transition: all 0.3s;
+        }
+        .sound-item.active .sound-toggle { background: #a29bfe; }
+        .sound-item.active .sound-toggle::after { left: 26px; }
+        .volume-control { margin-top: 30px; width: 100%; max-width: 360px; }
+        .volume-label { font-size: 14px; color: #7f8fa6; margin-bottom: 12px; }
+        .volume-slider {
+            width: 100%; -webkit-appearance: none; height: 6px;
+            background: rgba(255,255,255,0.1); border-radius: 3px; outline: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 20px; height: 20px; background: #a29bfe; border-radius: 50%; cursor: pointer;
+        }
+        .footer { text-align: center; padding: 30px 0; font-size: 12px; color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container" id="home">
+        <div class="header">
+            <h1>深呼吸</h1>
+            <p>基于脑科学的3分钟解压</p>
+        </div>
+        <div class="mood-section">
+            <div class="mood-title">现在感觉怎么样？</div>
+            <div class="mood-options">
+                <button class="mood-btn" onclick="openPage('breath')"><span>😰</span>很焦虑</button>
+                <button class="mood-btn" onclick="openPage('sound')"><span>😔</span>有点丧</button>
+                <button class="mood-btn" onclick="openPage('bubble')"><span>😤</span>烦躁</button>
+                <button class="mood-btn" onclick="openPage('sound')"><span>🥱</span>疲惫</button>
+                <button class="mood-btn" onclick="openPage('breath')"><span>😶</span>说不清</button>
+            </div>
+        </div>
+        <div class="modules">
+            <div class="module-card" onclick="openPage('breath')">
+                <div class="module-icon">🫁</div>
+                <div class="module-name">呼吸</div>
+            </div>
+            <div class="module-card" onclick="openPage('bubble')">
+                <div class="module-icon">🫧</div>
+                <div class="module-name">泡泡</div>
+            </div>
+            <div class="module-card" onclick="openPage('sound')">
+                <div class="module-icon">🎵</div>
+                <div class="module-name">声音</div>
+            </div>
+            <div class="module-card disabled"><div class="module-icon">🌀</div><div class="module-name">发呆</div></div>
+            <div class="module-card disabled"><div class="module-icon">🖐️</div><div class="module-name">触感</div></div>
+            <div class="module-card disabled"><div class="module-icon">💬</div><div class="module-name">倾诉</div></div>
+        </div>
+        <div class="footer">每个功能都有科学依据</div>
+    </div>
+
+    <!-- 呼吸页面 -->
+    <div class="page" id="breath-page">
+        <div class="page-header">
+            <button class="back-btn" onclick="closePage()">←</button>
+            <div class="page-title">4-7-8 呼吸法</div>
+            <div style="width:40px"></div>
+        </div>
+        <div class="page-content">
+            <div class="breath-circle-container">
+                <div class="breath-circle" id="breathCircle">
+                    <div class="breath-timer" id="breathTimer">4</div>
+                </div>
+            </div>
+            <div class="breath-status" id="breathStatus">准备好了吗？</div>
+            <div class="breath-progress" id="breathProgress"></div>
+            <button class="start-btn" id="breathBtn" onclick="toggleBreath()">开始呼吸</button>
+        </div>
+    </div>
+
+    <!-- 泡泡页面 -->
+    <div class="page" id="bubble-page">
+        <div class="page-header">
+            <button class="back-btn" onclick="closePage()">←</button>
+            <div class="page-title">捏泡泡解压</div>
+            <div style="width:40px"></div>
+        </div>
+        <div class="bubble-container" id="bubbleContainer"></div>
+        <div class="bubble-score">已捏爆 <span id="bubbleCount">0</span> 个 🎉</div>
+    </div>
+
+    <!-- 声音页面 -->
+    <div class="page" id="sound-page">
+        <div class="page-header">
+            <button class="back-btn" onclick="closePage()">←</button>
+            <div class="page-title">声音疗愈</div>
+            <div style="width:40px"></div>
+        </div>
+        <div class="page-content">
+            <div class="sound-list">
+                <div class="sound-item" data-sound="rain" onclick="toggleSound(this)">
+                    <div class="sound-info"><span class="sound-icon">🌧️</span><span class="sound-name">雨声</span></div>
+                    <div class="sound-toggle"></div>
+                </div>
+                <div class="sound-item" data-sound="wave" onclick="toggleSound(this)">
+                    <div class="sound-info"><span class="sound-icon">🌊</span><span class="sound-name">海浪</span></div>
+                    <div class="sound-toggle"></div>
+                </div>
+                <div class="sound-item" data-sound="fire" onclick="toggleSound(this)">
+                    <div class="sound-info"><span class="sound-icon">🔥</span><span class="sound-name">篝火</span></div>
+                    <div class="sound-toggle"></div>
+                </div>
+                <div class="sound-item" data-sound="white" onclick="toggleSound(this)">
+                    <div class="sound-info"><span class="sound-icon">📻</span><span class="sound-name">白噪音</span></div>
+                    <div class="sound-toggle"></div>
+                </div>
+            </div>
+            <div class="volume-control">
+                <div class="volume-label">音量</div>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="30" oninput="setVolume(this.value)">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 页面切换
+        function openPage(page) {
+            document.getElementById(page + '-page').classList.add('active');
+            document.getElementById('home').style.display = 'none';
+            if (page === 'bubble') initBubbles();
+            vibrate(30);
+        }
+        function closePage() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('home').style.display = 'block';
+            if (breathInterval) stopBreath();
+        }
+        function vibrate(ms) { if (navigator.vibrate) navigator.vibrate(ms); }
+
+        // ===== 呼吸模块 =====
+        let breathInterval = null, breathPhase = 0, breathCount = 0, breathTimer = 0;
+        const breathConfig = { inhale: 4, hold: 7, exhale: 8, rounds: 4 };
+
+        function toggleBreath() {
+            breathInterval ? stopBreath() : startBreath();
+        }
+        function startBreath() {
+            breathPhase = 0; breathCount = 0; breathTimer = breathConfig.inhale;
+            document.getElementById('breathBtn').textContent = '停止';
+            document.getElementById('breathCircle').className = 'breath-circle inhale';
+            updateBreathUI();
+            
+            breathInterval = setInterval(() => {
+                breathTimer--;
+                if (breathTimer <= 0) {
+                    breathPhase++;
+                    if (breathPhase > 2) {
+                        breathPhase = 0; breathCount++;
+                        if (breathCount >= breathConfig.rounds) { completeBreath(); return; }
+                    }
+                    switch(breathPhase) {
+                        case 0: breathTimer = breathConfig.inhale;
+                            document.getElementById('breathStatus').textContent = '吸气...';
+                            document.getElementById('breathCircle').className = 'breath-circle inhale'; break;
+                        case 1: breathTimer = breathConfig.hold;
+                            document.getElementById('breathStatus').textContent = '屏住...';
+                            document.getElementById('breathCircle').className = 'breath-circle hold'; break;
+                        case 2: breathTimer = breathConfig.exhale;
+                            document.getElementById('breathStatus').textContent = '呼气...';
+                            document.getElementById('breathCircle').className = 'breath-circle exhale'; break;
+                    }
+                    vibrate(50);
+                }
+                updateBreathUI();
+            }, 1000);
+        }
+        function updateBreathUI() {
+            document.getElementById('breathTimer').textContent = breathTimer;
+            document.getElementById('breathStatus').textContent = ['吸气...', '屏住...', '呼气...'][breathPhase];
+            document.getElementById('breathProgress').textContent = `第 ${breathCount + 1} / ${breathConfig.rounds} 轮`;
+        }
+        function stopBreath() {
+            clearInterval(breathInterval); breathInterval = null;
+            document.getElementById('breathBtn').textContent = '开始呼吸';
+            document.getElementById('breathStatus').textContent = '准备好了吗？';
+            document.getElementById('breathProgress').textContent = '';
+            document.getElementById('breathCircle').className = 'breath-circle';
+            document.getElementById('breathTimer').textContent = '4';
+        }
+        function completeBreath() {
+            stopBreath();
+            document.getElementById('breathStatus').textContent = '✨ 完成！感觉好点了吗？';
+            vibrate([100, 50, 100]);
+        }
+
+        // ===== 泡泡模块 =====
+        let bubbleCount = 0;
+        function initBubbles() {
+            const container = document.getElementById('bubbleContainer');
+            container.innerHTML = ''; bubbleCount = 0;
+            document.getElementById('bubbleCount').textContent = '0';
+            for (let i = 0; i < 15; i++) createBubble();
+        }
+        function createBubble() {
+            const container = document.getElementById('bubbleContainer');
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = 40 + Math.random() * 50;
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            bubble.style.left = Math.random() * (container.offsetWidth - size) + 'px';
+            bubble.style.top = Math.random() * (container.offsetHeight - size) + 'px';
+            bubble.style.animationDelay = Math.random() * 2 + 's';
+            bubble.onclick = function(e) { e.stopPropagation(); popBubble(this); };
+            container.appendChild(bubble);
+        }
+        function popBubble(bubble) {
+            bubble.classList.add('pop');
+            bubbleCount++;
+            document.getElementById('bubbleCount').textContent = bubbleCount;
+            vibrate(15);
+            setTimeout(() => { bubble.remove(); createBubble(); createBubble(); }, 150);
+        }
+
+        // ===== 声音模块 =====
+        let audioCtx = null;
+        const activeNodes = {};
+
+        function getAudioContext() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            return audioCtx;
+        }
+
+        function createNoise(type) {
+            const ctx = getAudioContext();
+            const bufferSize = 2 * ctx.sampleRate;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            if (type === 'white') {
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+            } else {
+                // Pink/Brown noise for rain, wave, fire
+                let b0=0, b1=0, b2=0, b3=0, b4=0, b5=0, b6=0;
+                for (let i = 0; i < bufferSize; i++) {
+                    const white = Math.random() * 2 - 1;
+                    b0 = 0.99886*b0 + white*0.0555179;
+                    b1 = 0.99332*b1 + white*0.0750759;
+                    b2 = 0.96900*b2 + white*0.1538520;
+                    b3 = 0.86650*b3 + white*0.3104856;
+                    b4 = 0.55000*b4 + white*0.5329522;
+                    b5 = -0.7616*b5 - white*0.0168980;
+                    data[i] = (b0+b1+b2+b3+b4+b5+b6+white*0.5362) * 0.11;
+                    b6 = white * 0.115926;
+                }
+            }
+            return buffer;
+        }
+
+        function toggleSound(el) {
+            const type = el.dataset.sound;
+            el.classList.toggle('active');
+            
+            if (el.classList.contains('active')) {
+                const ctx = getAudioContext();
+                const buffer = createNoise(type);
+                const source = ctx.createBufferSource();
+                source.buffer = buffer;
+                source.loop = true;
+                
+                const gain = ctx.createGain();
+                gain.gain.value = document.getElementById('volumeSlider').value / 100 * 0.5;
+                
+                source.connect(gain).connect(ctx.destination);
+                source.start();
+                activeNodes[type] = { source, gain };
+            } else {
+                if (activeNodes[type]) {
+                    activeNodes[type].source.stop();
+                    delete activeNodes[type];
+                }
+            }
+        }
+
+        function setVolume(val) {
+            const v = val / 100 * 0.5;
+            Object.values(activeNodes).forEach(n => n.gain.gain.value = v);
+        }
+    </script>
+</body>
+</html>
