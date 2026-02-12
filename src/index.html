@@ -3,354 +3,424 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#1a1a2e">
-    <title id="pageTitle">深呼吸 - 3分钟解压</title>
+    <meta name="theme-color" content="#0a0a0f">
+    <title id="pageTitle">深呼吸</title>
     <style>
-        :root{--bg1:#1a1a2e;--bg2:#16213e;--bg3:#0f3460;--accent:#a29bfe;--accent2:#6c5ce7;--text:#f5f5f5;--text2:#7f8fa6;--text3:#555}
+        :root{--bg:#0a0a0f;--card:rgba(255,255,255,0.03);--card-border:rgba(255,255,255,0.06);--accent:#818cf8;--accent2:#6366f1;--accent-glow:rgba(129,140,248,0.15);--text:#fafafa;--text2:rgba(255,255,255,0.5);--text3:rgba(255,255,255,0.25)}
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
-        body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));min-height:100vh;color:var(--text)}
-        .container{max-width:420px;margin:0 auto;padding:20px;min-height:100vh}
-        .header{text-align:center;padding:30px 0 20px}
-        .header h1{font-size:28px;font-weight:300;letter-spacing:4px}
-        .header p{font-size:14px;color:var(--text2);margin-top:8px}
-        .mood-section{background:rgba(255,255,255,0.05);border-radius:20px;padding:24px;margin-bottom:24px}
-        .mood-title{text-align:center;font-size:16px;color:var(--accent);margin-bottom:8px}
-        .mood-desc{text-align:center;font-size:12px;color:var(--text3);margin-bottom:20px}
-        .mood-options{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
-        .mood-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 16px;font-size:14px;color:var(--text);cursor:pointer}
-        .mood-btn.selected{background:rgba(162,155,254,0.3);border-color:var(--accent)}
-        .recommend-section{display:none;background:rgba(162,155,254,0.1);border-radius:16px;padding:20px;margin-bottom:24px}
-        .recommend-section.show{display:block}
-        .recommend-title{font-size:14px;color:var(--accent);margin-bottom:12px}
-        .recommend-btns{display:flex;gap:12px;flex-wrap:wrap}
-        .recommend-btn{background:rgba(162,155,254,0.2);border:1px solid var(--accent);border-radius:20px;padding:10px 20px;font-size:14px;color:#fff;cursor:pointer}
-        .modules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-        .module-card{background:rgba(255,255,255,0.06);border-radius:16px;padding:24px 12px;text-align:center;cursor:pointer}
-        .module-icon{font-size:32px;margin-bottom:12px}
-        .module-name{font-size:14px;color:#ddd}
-        .page{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));z-index:100;overflow-y:auto}
-        .page.active{display:flex;flex-direction:column}
-        .page-header{display:flex;justify-content:space-between;align-items:center;padding:15px 20px}
-        .back-btn{background:rgba(255,255,255,0.1);border:none;border-radius:50%;width:40px;height:40px;color:var(--text);font-size:20px;cursor:pointer}
-        .page-title{font-size:18px}
-        .page-content{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px}
-        .science-card{background:rgba(162,155,254,0.1);border-radius:16px;padding:16px 20px;margin-bottom:25px;width:100%;max-width:360px;border-left:3px solid var(--accent)}
-        .science-card h4{font-size:13px;color:var(--accent);margin-bottom:8px}
-        .science-card p{font-size:12px;color:#9f9f9f;line-height:1.6}
-        .science-card .source{font-size:11px;color:var(--text3);margin-top:8px;font-style:italic}
-        .breath-circle-container{width:200px;height:200px;margin-bottom:30px}
-        .breath-circle{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle,rgba(162,155,254,0.4),rgba(162,155,254,0.1) 70%);box-shadow:0 0 60px rgba(162,155,254,0.3);display:flex;align-items:center;justify-content:center;transition:transform 4s,box-shadow 4s}
-        .breath-circle.inhale{transform:scale(1.3);box-shadow:0 0 80px rgba(162,155,254,0.5)}
-        .breath-circle.exhale{transform:scale(0.8)}
-        .breath-timer{font-size:48px;font-weight:200}
-        .breath-status{margin-top:20px;font-size:20px;color:var(--accent)}
-        .breath-progress{margin-top:8px;font-size:14px;color:var(--text3)}
-        .start-btn{margin-top:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:30px;padding:16px 48px;font-size:16px;color:#fff;cursor:pointer}
-        .breath-modes{margin-top:20px;display:flex;gap:10px}
-        .breath-mode{background:rgba(255,255,255,0.1);border:none;border-radius:20px;padding:10px 16px;font-size:12px;color:var(--text2);cursor:pointer}
-        .breath-mode.active{background:rgba(162,155,254,0.3);color:var(--text)}
-        .daze-container{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center}
-        .daze-canvas{position:absolute;top:0;left:0;width:100%;height:100%}
-        .daze-timer{position:absolute;bottom:100px;font-size:48px;font-weight:200;color:rgba(255,255,255,0.3);z-index:1}
-        .daze-hint{position:absolute;bottom:60px;font-size:12px;color:rgba(255,255,255,0.2);z-index:1}
-        .daze-exit{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;width:40px;height:40px;color:rgba(255,255,255,0.5);font-size:16px;cursor:pointer;z-index:2}
-        .bubble-container{position:absolute;top:70px;left:0;right:0;bottom:120px;overflow:hidden}
-        .bubble{position:absolute;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.9),rgba(162,155,254,0.5) 60%,rgba(108,92,231,0.3));cursor:pointer;animation:float 3s ease-in-out infinite}
-        .bubble::before{content:'';position:absolute;top:12%;left:18%;width:35%;height:25%;background:linear-gradient(135deg,rgba(255,255,255,0.9),rgba(255,255,255,0.2));border-radius:50%}
-        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
-        .bubble.pop{animation:pop .15s forwards;pointer-events:none}
-        @keyframes pop{to{transform:scale(1.5);opacity:0}}
-        .bubble-footer{position:absolute;bottom:0;left:0;right:0;padding:15px 20px;background:rgba(26,26,46,0.95)}
-        .bubble-score{text-align:center;font-size:16px;color:var(--accent);margin-bottom:10px}
-        .bubble-tip{text-align:center;font-size:11px;color:var(--text3)}
-        .pop-text{position:absolute;font-size:24px;pointer-events:none;animation:popText .5s forwards;z-index:10}
-        @keyframes popText{to{transform:scale(1.2) translateY(-30px);opacity:0}}
-        .tear-container{width:100%;display:flex;flex-direction:column;align-items:center}
-        .paper-styles{display:flex;gap:8px;margin-bottom:20px}
-        .paper-style-btn{width:48px;height:56px;border-radius:6px;border:2px solid transparent;cursor:pointer;font-size:9px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px}
-        .paper-style-btn.active{border-color:var(--accent);transform:scale(1.1);box-shadow:0 4px 15px rgba(162,155,254,0.4)}
-        .style-note{background:linear-gradient(180deg,#fffde7,#fff9c4);color:#795548}
-        .style-pink{background:linear-gradient(180deg,#fce4ec,#f8bbd9);color:#880e4f}
-        .style-blue{background:linear-gradient(180deg,#e3f2fd,#bbdefb);color:#1565c0}
-        .style-dark{background:linear-gradient(180deg,#455a64,#263238);color:#90a4ae}
-        .style-kraft{background:linear-gradient(180deg,#d7ccc8,#a1887f);color:#4e342e}
-        .tear-paper{width:92%;max-width:340px;min-height:200px;border-radius:3px;padding:20px 24px;box-shadow:0 10px 40px rgba(0,0,0,0.5);position:relative}
-        .tear-paper textarea{width:100%;height:140px;background:transparent;border:none;outline:none;font-size:16px;color:inherit;resize:none;line-height:2}
-        .tear-paper textarea::placeholder{color:inherit;opacity:0.35}
-        .tear-paper-lines{position:absolute;top:58px;left:24px;right:24px;bottom:20px;pointer-events:none;opacity:0.12;background:repeating-linear-gradient(transparent,transparent 31px,currentColor 32px)}
-        .tear-paper-fold{position:absolute;top:0;right:0;border-style:solid;border-width:0 28px 28px 0;border-color:transparent rgba(0,0,0,0.1) transparent transparent}
-        .tear-actions{margin-top:28px;display:flex;gap:12px}
-        .tear-btn{border:none;border-radius:25px;padding:14px 28px;font-size:15px;color:#fff;cursor:pointer;font-weight:500}
-        .rip-btn{background:linear-gradient(135deg,#7c4dff,#651fff)}
-        .burn-btn{background:linear-gradient(135deg,#ff6d00,#ff3d00)}
-        .destroy-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:200;display:none;justify-content:center;align-items:center;flex-direction:column}
-        .destroy-overlay.active{display:flex}
-        .destroy-stage{position:relative;width:280px;height:180px}
-        .destroy-paper{width:100%;height:100%;border-radius:3px;padding:20px;font-size:14px;line-height:1.6;word-break:break-all;overflow:hidden}
-        .destroy-paper.ripping{animation:ripPaper 1.8s forwards}
-        @keyframes ripPaper{0%{clip-path:inset(0)}30%{clip-path:polygon(0 0,52% 0,48% 30%,55% 60%,45% 100%,0 100%)}60%{clip-path:polygon(0 0,25% 0,20% 40%,30% 80%,10% 100%,0 100%);transform:translateX(-40px) rotate(-8deg)}100%{clip-path:polygon(0 0,0 0,0 100%,0 100%);opacity:0}}
-        .destroy-paper.burning{animation:burnPaper 2.5s forwards}
-        @keyframes burnPaper{0%{filter:brightness(1)}30%{filter:brightness(1.5) sepia(0.5)}60%{filter:brightness(2) sepia(1);clip-path:polygon(0 100%,100% 100%,100% 50%,80% 40%,60% 55%,40% 35%,20% 50%,0 40%)}100%{filter:brightness(3);clip-path:polygon(0 100%,100% 100%,100% 100%,0 100%);opacity:0}}
-        .rip-pieces{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
-        .rip-piece{position:absolute;border-radius:2px}
-        .rip-piece.fly{animation:pieceFly 1.2s forwards}
-        @keyframes pieceFly{0%{opacity:1}100%{opacity:0;transform:translate(var(--tx),var(--ty)) rotate(var(--rot))}}
-        .fire-particles{position:absolute;bottom:0;left:0;right:0;height:100%;pointer-events:none}
-        .fire-p{position:absolute;border-radius:50%;animation:fireUp .8s forwards}
-        @keyframes fireUp{to{transform:translateY(-120px) scale(0);opacity:0}}
-        .ash-container{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:201}
-        .ash{position:absolute;background:#333;border-radius:50%;animation:ashDrop 3s forwards}
-        @keyframes ashDrop{0%{opacity:0.6}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-        .destroy-complete{position:absolute;text-align:center;opacity:0}
-        .destroy-complete.show{animation:completeShow .6s 1s forwards}
-        @keyframes completeShow{to{opacity:1}}
-        .destroy-icon{font-size:72px;margin-bottom:20px}
-        .destroy-text{font-size:22px;font-weight:300;color:#fff;margin-bottom:8px}
-        .destroy-sub{font-size:14px;color:var(--text2);margin-bottom:30px}
-        .destroy-close{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:25px;padding:12px 32px;color:#fff;font-size:14px;cursor:pointer}
-        .sound-content{width:100%;max-width:380px}
-        .sound-item{background:rgba(255,255,255,0.06);border-radius:16px;padding:16px 20px;margin-bottom:12px;border:1px solid transparent}
-        .sound-item.active{background:rgba(255,255,255,0.1);border-color:var(--accent)}
+        body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);min-height:100vh;min-height:100dvh;color:var(--text);overflow-x:hidden}
+        
+        /* 现代化容器 */
+        .app{max-width:430px;margin:0 auto;min-height:100vh;min-height:100dvh;position:relative}
+        .home{padding:0 20px 40px}
+        
+        /* 顶部渐变装饰 */
+        .glow-top{position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,var(--accent-glow),transparent 70%);pointer-events:none;z-index:0}
+        
+        /* 头部 */
+        .header{padding:60px 0 40px;text-align:center;position:relative;z-index:1}
+        .logo{font-size:32px;font-weight:600;letter-spacing:-0.5px;background:linear-gradient(135deg,#fff,rgba(255,255,255,0.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .tagline{font-size:13px;color:var(--text2);margin-top:8px;font-weight:400}
+        
+        /* 情绪卡片 */
+        .mood-card{background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:24px;padding:28px;margin-bottom:24px;position:relative;z-index:1}
+        .mood-label{font-size:15px;font-weight:500;margin-bottom:20px;color:var(--text)}
+        .mood-grid{display:flex;flex-wrap:wrap;gap:10px}
+        .mood-btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:10px 18px;font-size:14px;color:var(--text);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+        .mood-btn:active,.mood-btn.selected{background:var(--accent);border-color:var(--accent);transform:scale(0.97)}
+        
+        /* 推荐浮层 */
+        .recommend{display:none;background:linear-gradient(135deg,rgba(129,140,248,0.1),rgba(99,102,241,0.05));border:1px solid rgba(129,140,248,0.2);border-radius:20px;padding:20px;margin-bottom:24px;position:relative;z-index:1}
+        .recommend.show{display:block;animation:slideUp .3s ease}
+        @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .recommend-label{font-size:13px;color:var(--accent);margin-bottom:14px;font-weight:500}
+        .recommend-btns{display:flex;gap:10px;flex-wrap:wrap}
+        .recommend-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:100px;padding:10px 20px;font-size:14px;color:#fff;cursor:pointer}
+        
+        /* 功能网格 */
+        .modules{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;position:relative;z-index:1}
+        .module{background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:24px 20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+        .module:active{transform:scale(0.98);background:rgba(255,255,255,0.05)}
+        .module-icon{font-size:28px;margin-bottom:12px}
+        .module-name{font-size:15px;font-weight:500;color:var(--text)}
+        .module-desc{font-size:12px;color:var(--text2);margin-top:4px}
+        .module::after{content:'';position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(circle at 100% 0%,var(--accent-glow),transparent);opacity:0;transition:opacity .3s}
+        .module:active::after{opacity:1}
+        
+        /* 页面 */
+        .page{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:100}
+        .page.active{display:flex;flex-direction:column;animation:pageIn .3s ease}
+        @keyframes pageIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .page-header{display:flex;align-items:center;padding:16px 20px;gap:16px}
+        .back-btn{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+        .page-title{font-size:17px;font-weight:500}
+        .page-content{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px;overflow-y:auto}
+        
+        /* 科学卡片 */
+        .science{background:linear-gradient(135deg,rgba(129,140,248,0.08),rgba(99,102,241,0.03));border:1px solid rgba(129,140,248,0.15);border-radius:16px;padding:16px 18px;margin-bottom:28px;width:100%;max-width:360px}
+        .science-title{font-size:12px;color:var(--accent);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+        .science-text{font-size:13px;color:var(--text2);line-height:1.6}
+        
+        /* 呼吸 */
+        .breath-visual{width:200px;height:200px;position:relative;margin-bottom:40px}
+        .breath-ring{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;border:2px solid rgba(129,140,248,0.2);transition:all 4s ease-in-out}
+        .breath-ring.inhale{transform:scale(1.3);border-color:var(--accent);box-shadow:0 0 60px var(--accent-glow)}
+        .breath-ring.exhale{transform:scale(0.7);border-color:rgba(129,140,248,0.3)}
+        .breath-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(129,140,248,0.3),transparent);display:flex;align-items:center;justify-content:center}
+        .breath-num{font-size:56px;font-weight:200;color:var(--text)}
+        .breath-status{font-size:18px;color:var(--text2);margin-bottom:8px}
+        .breath-progress{font-size:13px;color:var(--text3)}
+        .breath-btn{margin-top:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:100px;padding:16px 48px;font-size:15px;font-weight:500;color:#fff;cursor:pointer}
+        .breath-modes{display:flex;gap:10px;margin-top:20px}
+        .breath-mode{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:10px 18px;font-size:13px;color:var(--text2);cursor:pointer}
+        .breath-mode.active{background:rgba(129,140,248,0.15);border-color:var(--accent);color:var(--text)}
+        
+        /* 发呆 */
+        .daze-wrap{position:fixed;top:0;left:0;right:0;bottom:0}
+        .daze-canvas{width:100%;height:100%}
+        .daze-ui{position:absolute;bottom:80px;left:0;right:0;text-align:center}
+        .daze-time{font-size:64px;font-weight:100;color:rgba(255,255,255,0.15)}
+        .daze-hint{font-size:13px;color:rgba(255,255,255,0.1);margin-top:12px}
+        .daze-close{position:absolute;top:20px;right:20px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer}
+        
+        /* 泡泡 */
+        .bubble-area{position:absolute;top:70px;left:0;right:0;bottom:100px}
+        .bubble{position:absolute;border-radius:50%;cursor:pointer;animation:bobble 3s ease-in-out infinite}
+        .bubble-inner{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.95),rgba(129,140,248,0.4) 50%,rgba(99,102,241,0.2));box-shadow:inset 0 -15px 30px rgba(99,102,241,0.2),0 10px 30px rgba(0,0,0,0.2)}
+        .bubble-shine{position:absolute;top:15%;left:20%;width:30%;height:20%;background:linear-gradient(135deg,rgba(255,255,255,0.8),transparent);border-radius:50%;transform:rotate(-40deg)}
+        @keyframes bobble{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-12px) rotate(2deg)}}
+        .bubble.pop .bubble-inner{animation:popBubble .2s forwards}
+        @keyframes popBubble{to{transform:scale(1.4);opacity:0}}
+        .bubble-footer{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,var(--bg))}
+        .bubble-score{text-align:center;font-size:15px;color:var(--text)}
+        .bubble-score span{color:var(--accent);font-weight:600;font-size:24px}
+        
+        /* ===== 撕纸现代化 ===== */
+        .tear-wrap{width:100%;max-width:380px}
+        .paper-picker{display:flex;gap:12px;margin-bottom:24px;justify-content:center}
+        .paper-opt{width:52px;height:64px;border-radius:12px;border:2px solid transparent;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+        .paper-opt.active{border-color:var(--accent);transform:scale(1.08);box-shadow:0 8px 24px rgba(129,140,248,0.3)}
+        .paper-opt::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(transparent,rgba(0,0,0,0.1))}
+        .paper-opt.p-cream{background:linear-gradient(180deg,#fef9e7,#fdf2c7)}
+        .paper-opt.p-rose{background:linear-gradient(180deg,#fdf2f8,#fbcfe8)}
+        .paper-opt.p-sky{background:linear-gradient(180deg,#f0f9ff,#bae6fd)}
+        .paper-opt.p-slate{background:linear-gradient(180deg,#334155,#1e293b)}
+        .paper-opt.p-amber{background:linear-gradient(180deg,#d6d3d1,#a8a29e)}
+        
+        .paper-card{width:100%;aspect-ratio:4/3;border-radius:16px;padding:24px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.4);transition:all .3s}
+        .paper-card.p-cream{background:linear-gradient(180deg,#fef9e7,#fdf2c7);color:#78350f}
+        .paper-card.p-rose{background:linear-gradient(180deg,#fdf2f8,#fbcfe8);color:#9d174d}
+        .paper-card.p-sky{background:linear-gradient(180deg,#f0f9ff,#bae6fd);color:#0c4a6e}
+        .paper-card.p-slate{background:linear-gradient(180deg,#334155,#1e293b);color:#cbd5e1}
+        .paper-card.p-amber{background:linear-gradient(180deg,#d6d3d1,#a8a29e);color:#44403c}
+        .paper-card textarea{width:100%;height:100%;background:transparent;border:none;outline:none;font-size:16px;color:inherit;resize:none;line-height:2;font-family:inherit}
+        .paper-card textarea::placeholder{color:inherit;opacity:0.3}
+        .paper-lines{position:absolute;top:60px;left:24px;right:24px;bottom:24px;background-size:100% 32px;pointer-events:none;opacity:0.08}
+        .p-cream .paper-lines,.p-amber .paper-lines{background:repeating-linear-gradient(transparent,transparent 31px,#92400e 32px)}
+        .p-rose .paper-lines{background:repeating-linear-gradient(transparent,transparent 31px,#be185d 32px)}
+        .p-sky .paper-lines{background:repeating-linear-gradient(transparent,transparent 31px,#0369a1 32px)}
+        .p-slate .paper-lines{background:repeating-linear-gradient(transparent,transparent 31px,#64748b 32px)}
+        
+        .tear-btns{display:flex;gap:12px;margin-top:28px;justify-content:center}
+        .tear-btn{border:none;border-radius:100px;padding:16px 32px;font-size:15px;font-weight:500;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s}
+        .tear-btn:active{transform:scale(0.96)}
+        .btn-rip{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
+        .btn-burn{background:linear-gradient(135deg,#f97316,#ea580c)}
+        
+        /* 销毁动效 */
+        .destroy-scene{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.97);z-index:300;display:none;justify-content:center;align-items:center}
+        .destroy-scene.active{display:flex;animation:fadeIn .4s}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        .destroy-stage{position:relative;width:300px;height:200px}
+        .destroy-paper{width:100%;height:100%;border-radius:12px;padding:20px;font-size:14px;line-height:1.6;word-break:break-all;overflow:hidden;position:relative}
+        .destroy-paper.ripping{animation:tearApart 2s forwards}
+        @keyframes tearApart{
+            0%{clip-path:inset(0);filter:brightness(1)}
+            20%{clip-path:inset(0);filter:brightness(1.1);transform:rotate(-1deg)}
+            40%{clip-path:polygon(0 0,55% 0,50% 30%,58% 60%,48% 100%,0 100%);transform:rotate(1deg)}
+            70%{clip-path:polygon(0 0,25% 0,20% 40%,30% 70%,15% 100%,0 100%);transform:translateX(-50px) rotate(-10deg);opacity:0.6}
+            100%{clip-path:polygon(0 0,0 0,0 100%,0 100%);transform:translateX(-100px) rotate(-20deg);opacity:0}
+        }
+        .destroy-paper.burning{animation:burnAway 2.8s forwards}
+        @keyframes burnAway{
+            0%{filter:brightness(1) sepia(0)}
+            25%{filter:brightness(1.3) sepia(0.3)}
+            50%{filter:brightness(1.8) sepia(0.8);clip-path:polygon(0 100%,100% 100%,100% 50%,85% 40%,70% 55%,50% 35%,30% 50%,15% 35%,0 45%)}
+            75%{filter:brightness(2.5) sepia(1);clip-path:polygon(0 100%,100% 100%,100% 75%,80% 70%,60% 80%,40% 65%,20% 78%,0 70%)}
+            100%{filter:brightness(4);clip-path:polygon(0 100%,100% 100%,100% 100%,0 100%);opacity:0}
+        }
+        .particle-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+        .rip-particle{position:absolute;border-radius:3px;animation:particleFly 1.5s forwards}
+        @keyframes particleFly{
+            0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}
+            100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(0.3)}
+        }
+        .fire-particle{position:absolute;border-radius:50%;animation:fireRise 1s forwards}
+        @keyframes fireRise{
+            0%{opacity:1;transform:translateY(0) scale(1)}
+            100%{opacity:0;transform:translateY(-150px) scale(0)}
+        }
+        .ember{position:absolute;border-radius:50%;animation:emberFloat 3s forwards}
+        @keyframes emberFloat{
+            0%{opacity:0.7;transform:translateY(0) scale(1)}
+            100%{opacity:0;transform:translateY(calc(100vh - var(--start))) rotate(600deg) scale(0.5)}
+        }
+        .destroy-done{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;opacity:0;pointer-events:none}
+        .destroy-done.show{opacity:1;pointer-events:auto;animation:doneIn .6s .8s both}
+        @keyframes doneIn{from{opacity:0;transform:translate(-50%,-50%) scale(0.8)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+        .done-icon{font-size:80px;margin-bottom:24px;display:block}
+        .done-title{font-size:24px;font-weight:300;color:#fff;margin-bottom:8px}
+        .done-sub{font-size:14px;color:var(--text2);margin-bottom:36px}
+        .done-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:100px;padding:14px 36px;color:#fff;font-size:14px;cursor:pointer}
+        
+        /* 声音 */
+        .sound-list{width:100%;max-width:380px}
+        .sound-card{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:18px;margin-bottom:12px;transition:all .2s}
+        .sound-card.active{background:rgba(129,140,248,0.08);border-color:rgba(129,140,248,0.25)}
         .sound-row{display:flex;align-items:center;justify-content:space-between;cursor:pointer}
         .sound-info{display:flex;align-items:center;gap:14px}
-        .sound-icon{font-size:26px}
-        .sound-name{font-size:15px}
-        .sound-desc{font-size:11px;color:var(--text2)}
-        .sound-toggle{width:50px;height:28px;background:rgba(255,255,255,0.1);border-radius:14px;position:relative}
-        .sound-toggle::after{content:'';position:absolute;top:4px;left:4px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left .3s}
-        .sound-item.active .sound-toggle{background:var(--accent)}
-        .sound-item.active .sound-toggle::after{left:26px}
-        .sound-slider-wrap{margin-top:12px;display:none}
-        .sound-item.active .sound-slider-wrap{display:block}
-        .sound-slider{width:100%;height:4px;-webkit-appearance:none;background:rgba(255,255,255,0.1);border-radius:2px}
-        .sound-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--accent);border-radius:50%}
-        .master-volume{margin-top:20px;padding:16px;background:rgba(255,255,255,0.05);border-radius:16px}
-        .master-label{font-size:14px;color:var(--text2);margin-bottom:12px;display:flex;justify-content:space-between}
-        .timer-section{margin-top:20px;text-align:center}
-        .timer-btns{display:flex;gap:10px;justify-content:center}
-        .timer-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:8px 16px;font-size:13px;color:var(--text);cursor:pointer}
-        .timer-btn.active{background:rgba(162,155,254,0.3);border-color:var(--accent)}
-        .timer-display{margin-top:12px;font-size:13px;color:var(--text3)}
-        .touch-tabs{display:flex;gap:8px;margin-bottom:20px}
-        .touch-tab{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:10px 16px;font-size:13px;color:var(--text);cursor:pointer}
-        .touch-tab.active{background:rgba(162,155,254,0.3);border-color:var(--accent)}
-        .touch-area{width:100%;max-width:340px;height:340px;border-radius:20px;overflow:hidden;position:relative;background:#1a1a2e}
-        .touch-hint{text-align:center;font-size:12px;color:var(--text3);margin-top:16px;line-height:1.6}
-        .ball-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 60%,#2d1b4e,#1a1a2e);position:relative}
-        .ball-wrapper{position:relative;width:180px;height:180px}
-        .ball{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 25%,#ffb8d0,#ff6b9d 30%,#e91e8c 60%,#b8156b 85%);box-shadow:0 30px 60px rgba(0,0,0,0.5);cursor:pointer}
-        .ball-shadow{position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);width:140px;height:20px;background:radial-gradient(ellipse,rgba(0,0,0,0.4),transparent 70%);border-radius:50%}
-        .ball-pressure{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-size:14px;color:var(--accent);opacity:0}
-        .sand-container{width:100%;height:100%;position:relative}
-        .sand-canvas{width:100%;height:100%;touch-action:none;cursor:crosshair}
-        .sand-guide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:rgba(255,255,255,0.3);pointer-events:none}
-        .sand-guide.hidden{opacity:0}
-        .sand-guide-icon{font-size:48px;margin-bottom:12px}
-        .sand-guide-text{font-size:14px;line-height:1.6}
-        .sand-tools{position:absolute;top:10px;right:10px}
-        .sand-btn{background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;color:#fff}
-        .sand-quote{position:absolute;bottom:15px;left:15px;right:15px;text-align:center;font-size:11px;color:rgba(255,255,255,0.25);font-style:italic}
-        .zen-container{width:100%;height:100%;position:relative}
-        .zen-canvas{width:100%;height:100%;touch-action:none;background:#f5f0e6;border-radius:16px}
-        .zen-pattern-select{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:8px;justify-content:center}
-        .zen-pattern-btn{background:rgba(0,0,0,0.1);border:none;border-radius:8px;padding:6px 12px;font-size:11px;color:#666;cursor:pointer}
-        .zen-pattern-btn.active{background:var(--accent);color:#fff}
-        .zen-progress{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--text3)}
-        .footer{text-align:center;padding:30px 0;font-size:12px;color:var(--text3)}
+        .sound-icon{font-size:24px}
+        .sound-name{font-size:15px;font-weight:500}
+        .sound-switch{width:48px;height:28px;border-radius:14px;background:rgba(255,255,255,0.1);position:relative;transition:background .3s}
+        .sound-switch::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .3s}
+        .sound-card.active .sound-switch{background:var(--accent)}
+        .sound-card.active .sound-switch::after{left:23px}
+        .sound-vol{margin-top:14px;display:none}
+        .sound-card.active .sound-vol{display:block}
+        .vol-slider{width:100%;height:4px;-webkit-appearance:none;background:rgba(255,255,255,0.1);border-radius:2px}
+        .vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(--accent);border-radius:50%;cursor:pointer}
+        .master-card{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:18px;margin-top:20px}
+        .master-label{font-size:13px;color:var(--text2);margin-bottom:12px;display:flex;justify-content:space-between}
+        .timer-row{display:flex;gap:10px;margin-top:20px;justify-content:center}
+        .timer-opt{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:10px 18px;font-size:13px;color:var(--text2);cursor:pointer}
+        .timer-opt.active{background:rgba(129,140,248,0.15);border-color:var(--accent);color:var(--text)}
+        .timer-info{text-align:center;margin-top:12px;font-size:13px;color:var(--text3)}
+        
+        /* 触感 */
+        .touch-picker{display:flex;gap:10px;margin-bottom:24px}
+        .touch-opt{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:12px 20px;font-size:14px;color:var(--text2);cursor:pointer}
+        .touch-opt.active{background:rgba(129,140,248,0.15);border-color:var(--accent);color:var(--text)}
+        .touch-canvas{width:100%;max-width:340px;aspect-ratio:1;border-radius:24px;overflow:hidden;position:relative}
+        .touch-tip{text-align:center;font-size:13px;color:var(--text3);margin-top:18px;line-height:1.6}
+        .ball-scene{width:100%;height:100%;background:radial-gradient(circle at 50% 60%,#1e1b4b,#0a0a0f);display:flex;align-items:center;justify-content:center;position:relative}
+        .stress-ball{width:65%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fda4af,#fb7185 35%,#e11d48 70%,#9f1239);box-shadow:0 40px 80px rgba(0,0,0,0.5),inset 0 -25px 50px rgba(0,0,0,0.3),inset 0 15px 40px rgba(255,255,255,0.15);cursor:pointer;transition:none}
+        .ball-shadow{position:absolute;bottom:40px;width:55%;height:15px;background:radial-gradient(ellipse,rgba(0,0,0,0.5),transparent 70%);border-radius:50%;transition:all .3s}
+        .ball-hint{position:absolute;bottom:24px;font-size:13px;color:var(--text3)}
+        .sand-scene{width:100%;height:100%;position:relative}
+        .sand-cv{width:100%;height:100%;touch-action:none}
+        .sand-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--text3);pointer-events:none;transition:opacity .5s}
+        .sand-overlay.hidden{opacity:0}
+        .sand-icon{font-size:48px;margin-bottom:12px}
+        .sand-text{font-size:14px;line-height:1.6}
+        .sand-clear{position:absolute;top:12px;right:12px;width:44px;height:44px;border-radius:12px;background:rgba(0,0,0,0.3);border:none;font-size:20px;cursor:pointer}
+        .zen-scene{width:100%;height:100%;position:relative}
+        .zen-cv{width:100%;height:100%;touch-action:none;background:#faf8f5;border-radius:20px}
+        .zen-tabs{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:8px;justify-content:center}
+        .zen-tab{background:rgba(0,0,0,0.06);border:none;border-radius:8px;padding:8px 14px;font-size:12px;color:#666;cursor:pointer}
+        .zen-tab.active{background:var(--accent);color:#fff}
+        .zen-status{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);font-size:12px;color:#999}
+        
+        .footer{text-align:center;padding:40px 20px;font-size:12px;color:var(--text3)}
     </style>
 </head>
 <body>
-    <div class="container" id="home">
-        <div class="header"><h1>深呼吸</h1><p>基于脑科学的3分钟解压</p></div>
-        <div class="mood-section">
-            <div class="mood-title">现在感觉怎么样？</div>
-            <div class="mood-desc">选择后为你推荐最适合的解压方式</div>
-            <div class="mood-options">
-                <button class="mood-btn" onclick="selectMood(this,'anxious')">😰 很焦虑</button>
-                <button class="mood-btn" onclick="selectMood(this,'sad')">😔 有点丧</button>
-                <button class="mood-btn" onclick="selectMood(this,'angry')">😤 烦躁</button>
-                <button class="mood-btn" onclick="selectMood(this,'tired')">🥱 疲惫</button>
-                <button class="mood-btn" onclick="selectMood(this,'unclear')">😶 说不清</button>
+    <div class="app">
+        <div class="glow-top"></div>
+        <div class="home" id="home">
+            <div class="header">
+                <div class="logo">深呼吸</div>
+                <div class="tagline">基于脑科学的即时解压</div>
             </div>
+            <div class="mood-card">
+                <div class="mood-label">现在感觉怎么样？</div>
+                <div class="mood-grid">
+                    <button class="mood-btn" onclick="pickMood(this,'anxious')"><span>😰</span>焦虑</button>
+                    <button class="mood-btn" onclick="pickMood(this,'sad')"><span>😔</span>低落</button>
+                    <button class="mood-btn" onclick="pickMood(this,'angry')"><span>😤</span>烦躁</button>
+                    <button class="mood-btn" onclick="pickMood(this,'tired')"><span>🥱</span>疲惫</button>
+                    <button class="mood-btn" onclick="pickMood(this,'meh')"><span>😶</span>说不清</button>
+                </div>
+            </div>
+            <div class="recommend" id="recommend">
+                <div class="recommend-label">💡 为你推荐</div>
+                <div class="recommend-btns" id="recommendBtns"></div>
+            </div>
+            <div class="modules">
+                <div class="module" onclick="go('breath')"><div class="module-icon">🫁</div><div class="module-name">呼吸</div><div class="module-desc">4-7-8 科学呼吸</div></div>
+                <div class="module" onclick="go('daze')"><div class="module-icon">🌀</div><div class="module-name">发呆</div><div class="module-desc">3分钟放空</div></div>
+                <div class="module" onclick="go('bubble')"><div class="module-icon">🫧</div><div class="module-name">泡泡</div><div class="module-desc">捏爆解压</div></div>
+                <div class="module" onclick="go('tear')"><div class="module-icon">📄</div><div class="module-name">撕纸</div><div class="module-desc">写下烦恼销毁</div></div>
+                <div class="module" onclick="go('sound')"><div class="module-icon">🎵</div><div class="module-name">声音</div><div class="module-desc">自然白噪音</div></div>
+                <div class="module" onclick="go('touch')"><div class="module-icon">🖐️</div><div class="module-name">触感</div><div class="module-desc">解压球/沙盘</div></div>
+            </div>
+            <div class="footer">每个功能都有科学依据</div>
         </div>
-        <div class="recommend-section" id="recommendSection">
-            <div class="recommend-title">💡 为你推荐</div>
-            <div class="recommend-btns" id="recommendBtns"></div>
-        </div>
-        <div class="modules">
-            <div class="module-card" onclick="openPage('breath')"><div class="module-icon">🫁</div><div class="module-name">呼吸</div></div>
-            <div class="module-card" onclick="openPage('daze')"><div class="module-icon">🌀</div><div class="module-name">发呆</div></div>
-            <div class="module-card" onclick="openPage('bubble')"><div class="module-icon">🫧</div><div class="module-name">泡泡</div></div>
-            <div class="module-card" onclick="openPage('tear')"><div class="module-icon">📄</div><div class="module-name">撕纸</div></div>
-            <div class="module-card" onclick="openPage('sound')"><div class="module-icon">🎵</div><div class="module-name">声音</div></div>
-            <div class="module-card" onclick="openPage('touch')"><div class="module-icon">🖐️</div><div class="module-name">触感</div></div>
-        </div>
-        <div class="footer">每个功能都有科学依据</div>
     </div>
 
     <div class="page" id="breath-page">
-        <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">🫁 科学呼吸</div><div style="width:40px"></div></div>
+        <div class="page-header"><button class="back-btn" onclick="back()">←</button><div class="page-title">科学呼吸</div></div>
         <div class="page-content">
-            <div class="science-card"><h4>🔬 科学原理</h4><p>4-7-8呼吸法激活迷走神经，触发副交感神经"休息-消化"反应，60秒内可显著降低心率。</p><div class="source">— Dr. Andrew Weil, Harvard</div></div>
-            <div class="breath-circle-container"><div class="breath-circle" id="breathCircle"><div class="breath-timer" id="breathTimer">4</div></div></div>
+            <div class="science"><div class="science-title">🔬 原理</div><div class="science-text">4-7-8呼吸法激活迷走神经，触发副交感神经"休息-消化"反应，60秒内降低心率。</div></div>
+            <div class="breath-visual"><div class="breath-ring" id="breathRing"></div><div class="breath-core"><div class="breath-num" id="breathNum">4</div></div></div>
             <div class="breath-status" id="breathStatus">准备好了吗？</div>
             <div class="breath-progress" id="breathProgress"></div>
-            <button class="start-btn" id="breathBtn" onclick="toggleBreath()">开始呼吸</button>
-            <div class="breath-modes"><button class="breath-mode active" data-mode="478" onclick="setBreathMode(this)">4-7-8</button><button class="breath-mode" data-mode="box" onclick="setBreathMode(this)">方块呼吸</button></div>
+            <button class="breath-btn" id="breathBtn" onclick="toggleBreath()">开始</button>
+            <div class="breath-modes"><button class="breath-mode active" onclick="setMode(this,'478')">4-7-8</button><button class="breath-mode" onclick="setMode(this,'box')">方块呼吸</button></div>
         </div>
     </div>
 
     <div class="page" id="daze-page">
-        <div class="daze-container">
-            <button class="daze-exit" onclick="closePage()">✕</button>
-            <canvas class="daze-canvas" id="dazeCanvas"></canvas>
-            <div class="daze-timer" id="dazeTimer">3:00</div>
-            <div class="daze-hint">什么都不用做</div>
-        </div>
+        <div class="daze-wrap"><button class="daze-close" onclick="back()">✕</button><canvas class="daze-canvas" id="dazeCanvas"></canvas><div class="daze-ui"><div class="daze-time" id="dazeTime">3:00</div><div class="daze-hint">什么都不用做</div></div></div>
     </div>
 
     <div class="page" id="bubble-page">
-        <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">🫧 捏泡泡</div><div style="width:40px"></div></div>
-        <div class="bubble-container" id="bubbleContainer"></div>
-        <div class="bubble-footer">
-            <div class="bubble-score">已捏爆 <span id="bubbleCount">0</span> 个 🎉</div>
-            <div class="bubble-tip">🔬 具身认知：模拟破坏可释放压力</div>
-        </div>
+        <div class="page-header"><button class="back-btn" onclick="back()">←</button><div class="page-title">捏泡泡</div></div>
+        <div class="bubble-area" id="bubbleArea"></div>
+        <div class="bubble-footer"><div class="bubble-score">已捏爆 <span id="bubbleScore">0</span> 个</div></div>
     </div>
 
     <div class="page" id="tear-page">
-        <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">📄 撕掉烦恼</div><div style="width:40px"></div></div>
+        <div class="page-header"><button class="back-btn" onclick="back()">←</button><div class="page-title">撕掉烦恼</div></div>
         <div class="page-content">
-            <div class="science-card"><h4>🔬 科学原理</h4><p>表达性写作可显著降低焦虑。写下负面情绪然后"销毁"，象征性告别它们。</p><div class="source">— Pennebaker, 1997</div></div>
-            <div class="tear-container">
-                <div class="paper-styles">
-                    <div class="paper-style-btn style-note active" onclick="setPaperStyle('note')">便签</div>
-                    <div class="paper-style-btn style-pink" onclick="setPaperStyle('pink')">粉色</div>
-                    <div class="paper-style-btn style-blue" onclick="setPaperStyle('blue')">蓝色</div>
-                    <div class="paper-style-btn style-dark" onclick="setPaperStyle('dark')">暗黑</div>
-                    <div class="paper-style-btn style-kraft" onclick="setPaperStyle('kraft')">牛皮</div>
+            <div class="science"><div class="science-title">🔬 原理</div><div class="science-text">表达性写作降低焦虑，将负面情绪"销毁"象征性告别。</div></div>
+            <div class="tear-wrap">
+                <div class="paper-picker">
+                    <div class="paper-opt p-cream active" onclick="setPaper('cream')"></div>
+                    <div class="paper-opt p-rose" onclick="setPaper('rose')"></div>
+                    <div class="paper-opt p-sky" onclick="setPaper('sky')"></div>
+                    <div class="paper-opt p-slate" onclick="setPaper('slate')"></div>
+                    <div class="paper-opt p-amber" onclick="setPaper('amber')"></div>
                 </div>
-                <div class="tear-paper style-note" id="tearPaper">
-                    <textarea id="tearText" placeholder="写下让你烦恼的事..."></textarea>
-                    <div class="tear-paper-lines"></div>
-                    <div class="tear-paper-fold"></div>
+                <div class="paper-card p-cream" id="paperCard">
+                    <textarea id="paperText" placeholder="写下让你烦恼的事..."></textarea>
+                    <div class="paper-lines"></div>
                 </div>
-                <div class="tear-actions">
-                    <button class="tear-btn rip-btn" onclick="destroyPaper('rip')">✂️ 撕碎它</button>
-                    <button class="tear-btn burn-btn" onclick="destroyPaper('burn')">🔥 烧掉它</button>
+                <div class="tear-btns">
+                    <button class="tear-btn btn-rip" onclick="destroy('rip')">✂️ 撕碎</button>
+                    <button class="tear-btn btn-burn" onclick="destroy('burn')">🔥 焚烧</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="destroy-overlay" id="destroyOverlay">
-        <div class="destroy-stage">
+    <div class="destroy-scene" id="destroyScene">
+        <div class="destroy-stage" id="destroyStage">
             <div class="destroy-paper" id="destroyPaper"></div>
-            <div class="rip-pieces" id="ripPieces"></div>
-            <div class="fire-particles" id="fireParticles"></div>
+            <div class="particle-layer" id="particleLayer"></div>
         </div>
-        <div class="ash-container" id="ashContainer"></div>
-        <div class="destroy-complete" id="destroyComplete">
-            <span class="destroy-icon" id="destroyIcon">✨</span>
-            <div class="destroy-text" id="destroyText">烦恼已消散</div>
-            <div class="destroy-sub">让过去的过去，拥抱新的开始</div>
-            <button class="destroy-close" onclick="closeDestroy()">继续前行</button>
+        <div class="destroy-done" id="destroyDone">
+            <span class="done-icon" id="doneIcon">✨</span>
+            <div class="done-title" id="doneTitle">烦恼已消散</div>
+            <div class="done-sub">让过去的过去，拥抱新的开始</div>
+            <button class="done-btn" onclick="closeDest()">继续前行</button>
         </div>
     </div>
 
-    <div class="page" id="sound-page">        <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">🎵 声音疗愈</div><div style="width:40px"></div></div>
+    <div class="page" id="sound-page">
+        <div class="page-header"><button class="back-btn" onclick="back()">←</button><div class="page-title">声音疗愈</div></div>
         <div class="page-content">
-            <div class="science-card"><h4>🔬 科学原理</h4><p>特定频率声音影响脑电波。粉红噪音增强深度睡眠，自然音唤起安全感。</p><div class="source">— J. Theoretical Biology, 2012</div></div>
-            <div class="sound-content">
-                <div class="sound-item" data-sound="rain"><div class="sound-row" onclick="toggleSound(this.parentElement)"><div class="sound-info"><span class="sound-icon">🌧️</span><div><div class="sound-name">雨声</div><div class="sound-desc">淅淅沥沥</div></div></div><div class="sound-toggle"></div></div><div class="sound-slider-wrap"><input type="range" class="sound-slider" min="0" max="100" value="70" onchange="setSoundVol(this)"></div></div>
-                <div class="sound-item" data-sound="wave"><div class="sound-row" onclick="toggleSound(this.parentElement)"><div class="sound-info"><span class="sound-icon">🌊</span><div><div class="sound-name">海浪</div><div class="sound-desc">潮起潮落</div></div></div><div class="sound-toggle"></div></div><div class="sound-slider-wrap"><input type="range" class="sound-slider" min="0" max="100" value="70" onchange="setSoundVol(this)"></div></div>
-                <div class="sound-item" data-sound="fire"><div class="sound-row" onclick="toggleSound(this.parentElement)"><div class="sound-info"><span class="sound-icon">🔥</span><div><div class="sound-name">篝火</div><div class="sound-desc">噼啪作响</div></div></div><div class="sound-toggle"></div></div><div class="sound-slider-wrap"><input type="range" class="sound-slider" min="0" max="100" value="70" onchange="setSoundVol(this)"></div></div>
-                <div class="sound-item" data-sound="white"><div class="sound-row" onclick="toggleSound(this.parentElement)"><div class="sound-info"><span class="sound-icon">📻</span><div><div class="sound-name">白噪音</div><div class="sound-desc">嘶嘶声</div></div></div><div class="sound-toggle"></div></div><div class="sound-slider-wrap"><input type="range" class="sound-slider" min="0" max="100" value="70" onchange="setSoundVol(this)"></div></div>
-                <div class="master-volume"><div class="master-label"><span>总音量</span><span id="masterVolValue">50%</span></div><input type="range" class="sound-slider" id="masterVolume" min="0" max="100" value="50" oninput="setMasterVol(this.value)"></div>
-                <div class="timer-section"><div class="timer-btns"><button class="timer-btn" onclick="setSoundTimer(this,15)">15分钟</button><button class="timer-btn" onclick="setSoundTimer(this,30)">30分钟</button><button class="timer-btn" onclick="setSoundTimer(this,60)">60分钟</button></div><div class="timer-display" id="timerDisplay"></div></div>
+            <div class="science"><div class="science-title">🔬 原理</div><div class="science-text">特定频率声音影响脑电波，自然音唤起安全感，降低皮质醇。</div></div>
+            <div class="sound-list">
+                <div class="sound-card" data-sound="rain"><div class="sound-row" onclick="toggleSnd(this.parentElement)"><div class="sound-info"><span class="sound-icon">🌧️</span><span class="sound-name">雨声</span></div><div class="sound-switch"></div></div><div class="sound-vol"><input type="range" class="vol-slider" min="0" max="100" value="70" oninput="setSndVol(this)"></div></div>
+                <div class="sound-card" data-sound="wave"><div class="sound-row" onclick="toggleSnd(this.parentElement)"><div class="sound-info"><span class="sound-icon">🌊</span><span class="sound-name">海浪</span></div><div class="sound-switch"></div></div><div class="sound-vol"><input type="range" class="vol-slider" min="0" max="100" value="70" oninput="setSndVol(this)"></div></div>
+                <div class="sound-card" data-sound="fire"><div class="sound-row" onclick="toggleSnd(this.parentElement)"><div class="sound-info"><span class="sound-icon">🔥</span><span class="sound-name">篝火</span></div><div class="sound-switch"></div></div><div class="sound-vol"><input type="range" class="vol-slider" min="0" max="100" value="70" oninput="setSndVol(this)"></div></div>
+                <div class="sound-card" data-sound="white"><div class="sound-row" onclick="toggleSnd(this.parentElement)"><div class="sound-info"><span class="sound-icon">📻</span><span class="sound-name">白噪音</span></div><div class="sound-switch"></div></div><div class="sound-vol"><input type="range" class="vol-slider" min="0" max="100" value="70" oninput="setSndVol(this)"></div></div>
+                <div class="master-card"><div class="master-label"><span>总音量</span><span id="masterVal">50%</span></div><input type="range" class="vol-slider" id="masterVol" min="0" max="100" value="50" oninput="setMaster(this.value)"></div>
+                <div class="timer-row"><button class="timer-opt" onclick="setTimer(this,15)">15分钟</button><button class="timer-opt" onclick="setTimer(this,30)">30分钟</button><button class="timer-opt" onclick="setTimer(this,60)">60分钟</button></div>
+                <div class="timer-info" id="timerInfo"></div>
             </div>
         </div>
     </div>
 
     <div class="page" id="touch-page">
-        <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">🖐️ 触感解压</div><div style="width:40px"></div></div>
+        <div class="page-header"><button class="back-btn" onclick="back()">←</button><div class="page-title">触感解压</div></div>
         <div class="page-content">
-            <div class="science-card"><h4>🔬 科学原理</h4><p>重复手部动作激活程序性记忆，绕过焦虑相关前额叶，产生心流状态。</p><div class="source">— Csikszentmihalyi, 1990</div></div>
-            <div class="touch-tabs">
-                <button class="touch-tab active" onclick="switchTouch('ball')">🔮 解压球</button>
-                <button class="touch-tab" onclick="switchTouch('sand')">🏖️ 禅意沙盘</button>
-                <button class="touch-tab" onclick="switchTouch('zen')">🌀 禅绕画</button>
+            <div class="science"><div class="science-title">🔬 原理</div><div class="science-text">重复手部动作激活程序性记忆，绕过焦虑相关前额叶，进入心流。</div></div>
+            <div class="touch-picker">
+                <button class="touch-opt active" onclick="setTouch('ball')">🔮 解压球</button>
+                <button class="touch-opt" onclick="setTouch('sand')">🏖️ 沙盘</button>
+                <button class="touch-opt" onclick="setTouch('zen')">🌀 禅绕</button>
             </div>
-            <div class="touch-area" id="touchArea"></div>
-            <div class="touch-hint" id="touchHint">按住球体，感受它在指尖变形</div>
+            <div class="touch-canvas" id="touchCanvas"></div>
+            <div class="touch-tip" id="touchTip">按住球体，感受变形</div>
         </div>
     </div>
 
 <script>
-const titles={home:'深呼吸 - 3分钟解压',breath:'科学呼吸',daze:'发呆模式',bubble:'捏泡泡',tear:'撕掉烦恼',sound:'声音疗愈',touch:'触感解压'};
-const moodRec={anxious:[{n:'🫁 呼吸',p:'breath'},{n:'📻 白噪音',p:'sound'}],sad:[{n:'🌧️ 雨声',p:'sound'},{n:'🌀 发呆',p:'daze'}],angry:[{n:'🫧 泡泡',p:'bubble'},{n:'📄 撕纸',p:'tear'}],tired:[{n:'🔥 篝火',p:'sound'},{n:'🌀 发呆',p:'daze'}],unclear:[{n:'🫁 呼吸',p:'breath'},{n:'🖐️ 触感',p:'touch'}]};
-function selectMood(btn,mood){document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');vibrate(30);const s=document.getElementById('recommendSection'),c=document.getElementById('recommendBtns');c.innerHTML=moodRec[mood].map(r=>`<button class="recommend-btn" onclick="openPage('${r.p}')">${r.n}</button>`).join('');s.classList.add('show')}
-function openPage(p){document.getElementById(p+'-page').classList.add('active');document.getElementById('home').style.display='none';document.getElementById('pageTitle').textContent=titles[p];if(p==='bubble')initBubbles();if(p==='daze')initDaze();if(p==='touch')switchTouch('ball');vibrate(30)}
-function closePage(){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('home').style.display='block';document.getElementById('pageTitle').textContent=titles.home;if(breathInterval)stopBreath();if(dazeInterval)stopDaze();stopAllSounds();stopBallVibration()}
+// 音频上下文
+let audioCtx=null;
+function getAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}
+
+// 音效生成
+function playRipSound(){const ctx=getAudio(),dur=0.6;const noise=ctx.createBufferSource(),buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<buf.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(buf.length*0.2))*(1+Math.random()*0.5);noise.buffer=buf;const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=800;const g=ctx.createGain();g.gain.setValueAtTime(0.4,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+dur);noise.connect(hp);hp.connect(g);g.connect(ctx.destination);noise.start()}
+function playBurnSound(){const ctx=getAudio(),dur=2.5;const noise=ctx.createBufferSource(),buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<buf.length;i++){let env=Math.exp(-i/(buf.length*0.5));d[i]=(Math.random()*2-1)*env*0.3;if(Math.random()<0.01)d[i]+=Math.random()*0.5*env}noise.buffer=buf;const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1500;const g=ctx.createGain();g.gain.setValueAtTime(0.5,ctx.currentTime);noise.connect(lp);lp.connect(g);g.connect(ctx.destination);noise.start()}
+function playDoneSound(){const ctx=getAudio();[523.25,659.25,783.99].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,ctx.currentTime+i*0.15);g.gain.linearRampToValueAtTime(0.15,ctx.currentTime+i*0.15+0.05);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+i*0.15+0.4);o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+i*0.15);o.stop(ctx.currentTime+i*0.15+0.5)})}
+function playPopSound(){const ctx=getAudio(),o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(900+Math.random()*400,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(150,ctx.currentTime+0.1);g.gain.setValueAtTime(0.3,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.1);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.1)}
+
 function vibrate(p){if(navigator.vibrate)navigator.vibrate(p)}
 
+// 导航
+const moodMap={anxious:[{n:'🫁 呼吸',p:'breath'},{n:'📻 白噪音',p:'sound'}],sad:[{n:'🌧️ 雨声',p:'sound'},{n:'🌀 发呆',p:'daze'}],angry:[{n:'🫧 泡泡',p:'bubble'},{n:'📄 撕纸',p:'tear'}],tired:[{n:'🔥 篝火',p:'sound'},{n:'🌀 发呆',p:'daze'}],meh:[{n:'🫁 呼吸',p:'breath'},{n:'🖐️ 触感',p:'touch'}]};
+function pickMood(btn,mood){document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');vibrate(20);const rec=document.getElementById('recommend'),btns=document.getElementById('recommendBtns');btns.innerHTML=moodMap[mood].map(m=>`<button class="recommend-btn" onclick="go('${m.p}')">${m.n}</button>`).join('');rec.classList.add('show')}
+function go(p){document.getElementById(p+'-page').classList.add('active');document.getElementById('home').style.display='none';document.getElementById('pageTitle').textContent=p;if(p==='bubble')initBubbles();if(p==='daze')initDaze();if(p==='touch')setTouch('ball');vibrate(20)}
+function back(){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('home').style.display='block';stopBreath();stopDaze();stopSounds();stopBall()}
+
 // 呼吸
-let breathInterval=null,breathPhase=0,breathCount=0,breathTimer=0,breathCfg={inhale:4,hold:7,exhale:8,rounds:4};
-function setBreathMode(btn){document.querySelectorAll('.breath-mode').forEach(b=>b.classList.remove('active'));btn.classList.add('active');breathCfg=btn.dataset.mode==='478'?{inhale:4,hold:7,exhale:8,rounds:4}:{inhale:4,hold:4,exhale:4,hold2:4,rounds:4};document.getElementById('breathTimer').textContent=breathCfg.inhale}
-function toggleBreath(){breathInterval?stopBreath():startBreath()}
-function startBreath(){breathPhase=0;breathCount=0;breathTimer=breathCfg.inhale;document.getElementById('breathBtn').textContent='停止';document.getElementById('breathCircle').className='breath-circle inhale';updateBreathUI();breathInterval=setInterval(()=>{breathTimer--;if(breathTimer<=0){breathPhase++;const max=breathCfg.hold2?3:2;if(breathPhase>max){breathPhase=0;breathCount++;if(breathCount>=breathCfg.rounds){completeBreath();return}}switch(breathPhase){case 0:breathTimer=breathCfg.inhale;document.getElementById('breathCircle').className='breath-circle inhale';break;case 1:breathTimer=breathCfg.hold;document.getElementById('breathCircle').className='breath-circle';break;case 2:breathTimer=breathCfg.exhale;document.getElementById('breathCircle').className='breath-circle exhale';break;case 3:breathTimer=breathCfg.hold2;document.getElementById('breathCircle').className='breath-circle';break}vibrate(50)}updateBreathUI()},1000)}
-function updateBreathUI(){document.getElementById('breathTimer').textContent=breathTimer;document.getElementById('breathStatus').textContent=['吸气...','屏住...','呼气...','屏住...'][breathPhase];document.getElementById('breathProgress').textContent=`第 ${breathCount+1}/${breathCfg.rounds} 轮`}
-function stopBreath(){clearInterval(breathInterval);breathInterval=null;document.getElementById('breathBtn').textContent='开始呼吸';document.getElementById('breathStatus').textContent='准备好了吗？';document.getElementById('breathProgress').textContent='';document.getElementById('breathCircle').className='breath-circle';document.getElementById('breathTimer').textContent=breathCfg.inhale}
-function completeBreath(){stopBreath();document.getElementById('breathStatus').textContent='✨ 完成！';vibrate([100,50,100])}
+let breathInt=null,bPhase=0,bCount=0,bTimer=0,bCfg={in:4,hold:7,out:8,rounds:4};
+function setMode(btn,m){document.querySelectorAll('.breath-mode').forEach(b=>b.classList.remove('active'));btn.classList.add('active');bCfg=m==='478'?{in:4,hold:7,out:8,rounds:4}:{in:4,hold:4,out:4,hold2:4,rounds:4};document.getElementById('breathNum').textContent=bCfg.in}
+function toggleBreath(){breathInt?stopBreath():startBreath()}
+function startBreath(){bPhase=0;bCount=0;bTimer=bCfg.in;document.getElementById('breathBtn').textContent='停止';document.getElementById('breathRing').className='breath-ring inhale';updateBreath();breathInt=setInterval(()=>{bTimer--;if(bTimer<=0){bPhase++;const max=bCfg.hold2?3:2;if(bPhase>max){bPhase=0;bCount++;if(bCount>=bCfg.rounds){doneBreath();return}}switch(bPhase){case 0:bTimer=bCfg.in;document.getElementById('breathRing').className='breath-ring inhale';break;case 1:bTimer=bCfg.hold;document.getElementById('breathRing').className='breath-ring';break;case 2:bTimer=bCfg.out;document.getElementById('breathRing').className='breath-ring exhale';break;case 3:bTimer=bCfg.hold2;document.getElementById('breathRing').className='breath-ring';break}vibrate(40)}updateBreath()},1000)}
+function updateBreath(){document.getElementById('breathNum').textContent=bTimer;document.getElementById('breathStatus').textContent=['吸气','屏住','呼气','屏住'][bPhase];document.getElementById('breathProgress').textContent=`${bCount+1} / ${bCfg.rounds}`}
+function stopBreath(){if(breathInt){clearInterval(breathInt);breathInt=null}document.getElementById('breathBtn').textContent='开始';document.getElementById('breathStatus').textContent='准备好了吗？';document.getElementById('breathProgress').textContent='';document.getElementById('breathRing').className='breath-ring';document.getElementById('breathNum').textContent=bCfg.in}
+function doneBreath(){stopBreath();document.getElementById('breathStatus').textContent='✨ 完成';vibrate([80,40,80])}
 
 // 发呆
-let dazeInterval=null,dazeTime=180;
-function initDaze(){const c=document.getElementById('dazeCanvas'),ctx=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;dazeTime=180;updateDazeTimer();const blobs=[];for(let i=0;i<5;i++)blobs.push({x:Math.random()*c.width,y:Math.random()*c.height,r:80+Math.random()*60,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5,hue:240+Math.random()*60});function draw(){ctx.fillStyle='rgba(26,26,46,0.03)';ctx.fillRect(0,0,c.width,c.height);blobs.forEach(b=>{b.x+=b.dx;b.y+=b.dy;if(b.x<0||b.x>c.width)b.dx*=-1;if(b.y<0||b.y>c.height)b.dy*=-1;const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);g.addColorStop(0,`hsla(${b.hue},60%,50%,0.3)`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill()});requestAnimationFrame(draw)}draw();dazeInterval=setInterval(()=>{dazeTime--;updateDazeTimer();if(dazeTime<=0)closePage()},1000)}
-function updateDazeTimer(){document.getElementById('dazeTimer').textContent=`${Math.floor(dazeTime/60)}:${(dazeTime%60).toString().padStart(2,'0')}`}
-function stopDaze(){if(dazeInterval){clearInterval(dazeInterval);dazeInterval=null}}
+let dazeInt=null,dazeT=180;
+function initDaze(){const c=document.getElementById('dazeCanvas'),ctx=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;dazeT=180;updDaze();const blobs=[];for(let i=0;i<5;i++)blobs.push({x:Math.random()*c.width,y:Math.random()*c.height,r:100+Math.random()*80,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,hue:250+Math.random()*50});(function draw(){ctx.fillStyle='rgba(10,10,15,0.02)';ctx.fillRect(0,0,c.width,c.height);blobs.forEach(b=>{b.x+=b.vx;b.y+=b.vy;if(b.x<0||b.x>c.width)b.vx*=-1;if(b.y<0||b.y>c.height)b.vy*=-1;const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);g.addColorStop(0,`hsla(${b.hue},70%,55%,0.25)`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill()});requestAnimationFrame(draw)})();dazeInt=setInterval(()=>{dazeT--;updDaze();if(dazeT<=0)back()},1000)}
+function updDaze(){document.getElementById('dazeTime').textContent=`${Math.floor(dazeT/60)}:${(dazeT%60).toString().padStart(2,'0')}`}
+function stopDaze(){if(dazeInt){clearInterval(dazeInt);dazeInt=null}}
 
 // 泡泡
-let bubbleCount=0,popCtx=null;
-function initBubbles(){const c=document.getElementById('bubbleContainer');c.innerHTML='';bubbleCount=0;document.getElementById('bubbleCount').textContent='0';for(let i=0;i<12;i++)createBubble();if(!popCtx)popCtx=new(window.AudioContext||window.webkitAudioContext)()}
-function createBubble(){const c=document.getElementById('bubbleContainer'),b=document.createElement('div');b.className='bubble';const s=50+Math.random()*45;b.style.cssText=`width:${s}px;height:${s}px;left:${10+Math.random()*(c.offsetWidth-s-20)}px;top:${10+Math.random()*(c.offsetHeight-s-20)}px;animation-delay:${Math.random()*2}s`;b.ontouchstart=b.onclick=e=>{e.preventDefault();popBubble(b)};c.appendChild(b)}
-function playPopSound(){if(!popCtx)return;if(popCtx.state==='suspended')popCtx.resume();const o=popCtx.createOscillator(),g=popCtx.createGain();o.type='sine';o.frequency.setValueAtTime(800+Math.random()*600,popCtx.currentTime);o.frequency.exponentialRampToValueAtTime(200,popCtx.currentTime+0.08);g.gain.setValueAtTime(0.25,popCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,popCtx.currentTime+0.08);o.connect(g);g.connect(popCtx.destination);o.start();o.stop(popCtx.currentTime+0.08)}
-function popBubble(b){if(b.classList.contains('pop'))return;playPopSound();vibrate([20,15,30]);b.classList.add('pop');bubbleCount++;document.getElementById('bubbleCount').textContent=bubbleCount;setTimeout(()=>{b.remove();createBubble();if(Math.random()>0.5)createBubble()},150)}
+let bubbleCnt=0;
+function initBubbles(){const area=document.getElementById('bubbleArea');area.innerHTML='';bubbleCnt=0;document.getElementById('bubbleScore').textContent='0';for(let i=0;i<12;i++)makeBubble()}
+function makeBubble(){const area=document.getElementById('bubbleArea'),b=document.createElement('div');b.className='bubble';const s=55+Math.random()*40;b.innerHTML='<div class="bubble-inner"><div class="bubble-shine"></div></div>';b.style.cssText=`width:${s}px;height:${s}px;left:${10+Math.random()*(area.offsetWidth-s-20)}px;top:${10+Math.random()*(area.offsetHeight-s-20)}px;animation-delay:${Math.random()*2}s`;b.onclick=b.ontouchstart=e=>{e.preventDefault();popIt(b)};area.appendChild(b)}
+function popIt(b){if(b.classList.contains('pop'))return;playPopSound();vibrate([15,10,25]);b.classList.add('pop');bubbleCnt++;document.getElementById('bubbleScore').textContent=bubbleCnt;setTimeout(()=>{b.remove();makeBubble();if(Math.random()>0.4)makeBubble()},200)}
 
 // 撕纸
-let paperStyle='note';
-function setPaperStyle(style){paperStyle=style;document.querySelectorAll('.paper-style-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`.style-${style}`).classList.add('active');const paper=document.getElementById('tearPaper');paper.className=`tear-paper style-${style}`}
-function destroyPaper(mode){const text=document.getElementById('tearText').value;if(!text.trim()){vibrate(100);return}vibrate([50,30,50,30,100]);const overlay=document.getElementById('destroyOverlay');const paper=document.getElementById('destroyPaper');const complete=document.getElementById('destroyComplete');paper.className=`destroy-paper style-${paperStyle}`;paper.textContent=text.substring(0,100)+(text.length>100?'...':'');complete.classList.remove('show');overlay.classList.add('active');setTimeout(()=>{if(mode==='rip'){paper.classList.add('ripping');createRipPieces();document.getElementById('destroyIcon').textContent='✂️';document.getElementById('destroyText').textContent='碎片已飘散'}else{paper.classList.add('burning');createFireParticles();createAsh();document.getElementById('destroyIcon').textContent='🔥';document.getElementById('destroyText').textContent='灰飞烟灭'}vibrate([100,50,100,50,200]);setTimeout(()=>{complete.classList.add('show')},mode==='rip'?1500:2000)},100)}
-function createRipPieces(){const cont=document.getElementById('ripPieces');cont.innerHTML='';const colors=['#fffde7','#fff9c4','#fce4ec','#e3f2fd','#d7ccc8'];for(let i=0;i<25;i++){const p=document.createElement('div');p.className='rip-piece';p.style.cssText=`width:${15+Math.random()*30}px;height:${20+Math.random()*40}px;left:${30+Math.random()*40}%;top:${20+Math.random()*60}%;background:${colors[Math.floor(Math.random()*colors.length)]};--tx:${(Math.random()-0.5)*400}px;--ty:${100+Math.random()*300}px;--rot:${Math.random()*1080}deg`;setTimeout(()=>p.classList.add('fly'),100+i*30);cont.appendChild(p)}}
-function createFireParticles(){const cont=document.getElementById('fireParticles');cont.innerHTML='';const colors=['#ff6600','#ff9900','#ffcc00','#ff3300'];for(let i=0;i<40;i++){const p=document.createElement('div');p.className='fire-p';const size=4+Math.random()*8;p.style.cssText=`width:${size}px;height:${size}px;left:${10+Math.random()*80}%;bottom:${Math.random()*50}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*1.5}s`;cont.appendChild(p)}}
-function createAsh(){const cont=document.getElementById('ashContainer');cont.innerHTML='';for(let i=0;i<30;i++){const a=document.createElement('div');a.className='ash';const size=2+Math.random()*4;a.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${20+Math.random()*30}%;animation-delay:${0.5+Math.random()*2}s`;cont.appendChild(a)}}
-function closeDestroy(){document.getElementById('destroyOverlay').classList.remove('active');document.getElementById('destroyPaper').className='destroy-paper';document.getElementById('tearText').value='';document.getElementById('ripPieces').innerHTML='';document.getElementById('fireParticles').innerHTML='';document.getElementById('ashContainer').innerHTML=''}
+let paperStyle='cream';
+function setPaper(s){paperStyle=s;document.querySelectorAll('.paper-opt').forEach(o=>o.classList.remove('active'));document.querySelector('.p-'+s).classList.add('active');document.getElementById('paperCard').className='paper-card p-'+s}
+function destroy(mode){const text=document.getElementById('paperText').value;if(!text.trim()){vibrate(100);return}vibrate([40,20,40,20,80]);const scene=document.getElementById('destroyScene'),paper=document.getElementById('destroyPaper'),done=document.getElementById('destroyDone'),layer=document.getElementById('particleLayer');paper.className='destroy-paper p-'+paperStyle;paper.textContent=text.substring(0,80)+(text.length>80?'...':'');done.classList.remove('show');layer.innerHTML='';scene.classList.add('active');setTimeout(()=>{if(mode==='rip'){paper.classList.add('ripping');playRipSound();createRipParticles();document.getElementById('doneIcon').textContent='✂️';document.getElementById('doneTitle').textContent='碎片已飘散'}else{paper.classList.add('burning');playBurnSound();createFireParticles();createEmbers();document.getElementById('doneIcon').textContent='🔥';document.getElementById('doneTitle').textContent='灰飞烟灭'}setTimeout(()=>{playDoneSound();done.classList.add('show')},mode==='rip'?1800:2500)},100)}
+function createRipParticles(){const layer=document.getElementById('particleLayer'),colors=['#fef9e7','#fdf2c7','#fdf2f8','#e3f2fd','#d6d3d1'];for(let i=0;i<30;i++){const p=document.createElement('div');p.className='rip-particle';const w=12+Math.random()*25,h=15+Math.random()*35;p.style.cssText=`width:${w}px;height:${h}px;left:${30+Math.random()*40}%;top:${20+Math.random()*60}%;background:${colors[Math.floor(Math.random()*colors.length)]};--x:${(Math.random()-0.5)*500}px;--y:${150+Math.random()*250}px;--r:${Math.random()*1200}deg;animation-delay:${i*0.03}s`;layer.appendChild(p)}}
+function createFireParticles(){const layer=document.getElementById('particleLayer'),colors=['#fbbf24','#f97316','#ef4444','#fcd34d'];for(let i=0;i<50;i++){const p=document.createElement('div');p.className='fire-particle';const s=5+Math.random()*10;p.style.cssText=`width:${s}px;height:${s}px;left:${10+Math.random()*80}%;bottom:${Math.random()*60}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*2}s`;layer.appendChild(p)}}
+function createEmbers(){const layer=document.getElementById('particleLayer');for(let i=0;i<25;i++){const e=document.createElement('div');e.className='ember';const s=2+Math.random()*5;const startY=Math.random()*200;e.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${startY}px;background:#4b5563;--start:${startY}px;animation-delay:${1+Math.random()*2}s`;layer.appendChild(e)}}
+function closeDest(){document.getElementById('destroyScene').classList.remove('active');document.getElementById('destroyPaper').className='destroy-paper';document.getElementById('paperText').value=''}
 
 // 声音
-let audioCtx=null;const activeNodes={};let masterVol=0.5,soundTimer=null,soundTimerEnd=0;
-function getCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}
-function createSoundBuffer(type){const ctx=getCtx(),sr=ctx.sampleRate,len=sr*4,buf=ctx.createBuffer(2,len,sr),L=buf.getChannelData(0),R=buf.getChannelData(1);if(type==='white')for(let i=0;i<len;i++)L[i]=R[i]=(Math.random()*2-1)*0.5;else if(type==='rain'){let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;b0=0.99886*b0+w*0.0555;b1=0.99332*b1+w*0.0751;b2=0.969*b2+w*0.1539;b3=0.8665*b3+w*0.3105;b4=0.55*b4+w*0.533;b5=-0.7616*b5-w*0.0169;const p=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.06;b6=w*0.116;L[i]=p;R[i]=p;if(Math.random()<0.001)for(let j=0;j<150&&i+j<len;j++){const de=Math.exp(-j/20);L[i+j]+=0.3*de*(Math.random()-0.5)}}}else if(type==='wave')for(let i=0;i<len;i++){const t=i/sr,phase=(t%8)/8;const env=phase<0.5?Math.sin(phase*Math.PI):Math.sin(phase*Math.PI)*0.3;L[i]=R[i]=(Math.random()*2-1)*0.3*env}else if(type==='fire')for(let i=0;i<len;i++){let n=(Math.random()*2-1)*0.15;if(Math.random()<0.005)for(let j=0;j<300&&i+j<len;j++)L[i+j]+=0.3*Math.exp(-j/50)*Math.sin(j/sr*300*Math.PI*2);L[i]+=n;R[i]=L[i]*(0.85+Math.random()*0.3)}return buf}
-function toggleSound(el){const type=el.dataset.sound;if(el.classList.contains('active')){el.classList.remove('active');if(activeNodes[type]){activeNodes[type].src.stop();delete activeNodes[type]}}else{el.classList.add('active');const ctx=getCtx(),buf=createSoundBuffer(type),src=ctx.createBufferSource(),gain=ctx.createGain();src.buffer=buf;src.loop=true;const slider=el.querySelector('.sound-slider');gain.gain.value=masterVol*(slider?slider.value/100:0.7);src.connect(gain);gain.connect(ctx.destination);src.start();activeNodes[type]={src,gain,vol:slider?slider.value/100:0.7}}}
-function setSoundVol(slider){const el=slider.closest('.sound-item'),type=el.dataset.sound;if(activeNodes[type]){activeNodes[type].vol=slider.value/100;activeNodes[type].gain.gain.value=masterVol*activeNodes[type].vol}}
-function setMasterVol(v){masterVol=v/100;document.getElementById('masterVolValue').textContent=v+'%';Object.values(activeNodes).forEach(n=>n.gain.gain.value=masterVol*n.vol)}
-function setSoundTimer(btn,min){document.querySelectorAll('.timer-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(soundTimer)clearInterval(soundTimer);soundTimerEnd=Date.now()+min*60*1000;updateTimerDisplay();soundTimer=setInterval(()=>{if(Date.now()>=soundTimerEnd){stopAllSounds();clearInterval(soundTimer);document.getElementById('timerDisplay').textContent='已停止'}else updateTimerDisplay()},1000)}
-function updateTimerDisplay(){const left=Math.max(0,soundTimerEnd-Date.now()),m=Math.floor(left/60000),s=Math.floor((left%60000)/1000);document.getElementById('timerDisplay').textContent=`${m}:${s.toString().padStart(2,'0')} 后停止`}
-function stopAllSounds(){Object.keys(activeNodes).forEach(k=>{activeNodes[k].src.stop();delete activeNodes[k]});document.querySelectorAll('.sound-item').forEach(el=>el.classList.remove('active'));if(soundTimer){clearInterval(soundTimer);soundTimer=null}document.getElementById('timerDisplay').textContent=''}
+let sndCtx=null;const sndNodes={};let masterV=0.5,sndTimer=null,sndEnd=0;
+function getSnd(){if(!sndCtx)sndCtx=new(window.AudioContext||window.webkitAudioContext)();if(sndCtx.state==='suspended')sndCtx.resume();return sndCtx}
+function makeSndBuf(type){const ctx=getSnd(),sr=ctx.sampleRate,len=sr*4,buf=ctx.createBuffer(2,len,sr),L=buf.getChannelData(0),R=buf.getChannelData(1);if(type==='white')for(let i=0;i<len;i++)L[i]=R[i]=(Math.random()*2-1)*0.5;else if(type==='rain'){let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;b0=0.99886*b0+w*0.0555;b1=0.99332*b1+w*0.0751;b2=0.969*b2+w*0.1539;b3=0.8665*b3+w*0.3105;b4=0.55*b4+w*0.533;b5=-0.7616*b5-w*0.0169;const p=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.06;b6=w*0.116;L[i]=p;R[i]=p;if(Math.random()<0.001)for(let j=0;j<150&&i+j<len;j++){L[i+j]+=0.35*Math.exp(-j/20)*(Math.random()-0.5)}}}else if(type==='wave')for(let i=0;i<len;i++){const phase=((i/sr)%8)/8;const env=phase<0.5?Math.sin(phase*Math.PI):Math.sin(phase*Math.PI)*0.3;L[i]=R[i]=(Math.random()*2-1)*0.3*env}else if(type==='fire')for(let i=0;i<len;i++){let n=(Math.random()*2-1)*0.15;if(Math.random()<0.005)for(let j=0;j<300&&i+j<len;j++)L[i+j]+=0.35*Math.exp(-j/50)*Math.sin(j/sr*300*Math.PI*2);L[i]+=n;R[i]=L[i]*(0.85+Math.random()*0.3)}return buf}
+function toggleSnd(el){const t=el.dataset.sound;if(el.classList.contains('active')){el.classList.remove('active');if(sndNodes[t]){sndNodes[t].src.stop();delete sndNodes[t]}}else{el.classList.add('active');const ctx=getSnd(),buf=makeSndBuf(t),src=ctx.createBufferSource(),gain=ctx.createGain();src.buffer=buf;src.loop=true;const slider=el.querySelector('.vol-slider');gain.gain.value=masterV*(slider?slider.value/100:0.7);src.connect(gain);gain.connect(ctx.destination);src.start();sndNodes[t]={src,gain,v:slider?slider.value/100:0.7}}}
+function setSndVol(slider){const el=slider.closest('.sound-card'),t=el.dataset.sound;if(sndNodes[t]){sndNodes[t].v=slider.value/100;sndNodes[t].gain.gain.value=masterV*sndNodes[t].v}}
+function setMaster(v){masterV=v/100;document.getElementById('masterVal').textContent=v+'%';Object.values(sndNodes).forEach(n=>n.gain.gain.value=masterV*n.v)}
+function setTimer(btn,min){document.querySelectorAll('.timer-opt').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(sndTimer)clearInterval(sndTimer);sndEnd=Date.now()+min*60*1000;updTimer();sndTimer=setInterval(()=>{if(Date.now()>=sndEnd){stopSounds();document.getElementById('timerInfo').textContent='已停止'}else updTimer()},1000)}
+function updTimer(){const left=Math.max(0,sndEnd-Date.now()),m=Math.floor(left/60000),s=Math.floor((left%60000)/1000);document.getElementById('timerInfo').textContent=`${m}:${s.toString().padStart(2,'0')} 后停止`}
+function stopSounds(){Object.keys(sndNodes).forEach(k=>{sndNodes[k].src.stop();delete sndNodes[k]});document.querySelectorAll('.sound-card').forEach(el=>el.classList.remove('active'));if(sndTimer){clearInterval(sndTimer);sndTimer=null}document.getElementById('timerInfo').textContent=''}
 
 // 触感
-let ballPressing=false,ballPressure=0,ballVibInterval=null,ballRecoverInterval=null;
-let sandCtx=null,sandDrawing=false,sandLastX=0,sandLastY=0,sandHasDrawn=false;
-let zenCtx=null,zenDrawing=false,zenLastX=0,zenLastY=0,zenPattern='spiral',zenStrokes=0;
-function switchTouch(mode){document.querySelectorAll('.touch-tab').forEach(t=>t.classList.remove('active'));document.querySelector(`.touch-tab:nth-child(${mode==='ball'?1:mode==='sand'?2:3})`).classList.add('active');stopBallVibration();const area=document.getElementById('touchArea'),hint=document.getElementById('touchHint');if(mode==='ball'){area.innerHTML='<div class="ball-container"><div class="ball-wrapper"><div class="ball" id="theBall"></div><div class="ball-shadow" id="ballShadow"></div></div><div class="ball-pressure" id="ballPressure"></div></div>';hint.innerHTML='按住球体，感受它在指尖变形';initBall()}else if(mode==='sand'){area.innerHTML='<div class="sand-container"><canvas class="sand-canvas" id="sandCanvas"></canvas><div class="sand-guide" id="sandGuide"><div class="sand-guide-icon">🏖️</div><div class="sand-guide-text">用手指在沙上作画</div></div><div class="sand-tools"><button class="sand-btn" onclick="shakeSand()">🔄</button></div><div class="sand-quote">"让烦恼随风而去"</div></div>';hint.innerHTML='在沙上画画，摇一摇清空';initSand()}else{area.innerHTML='<div class="zen-container"><canvas class="zen-canvas" id="zenCanvas"></canvas><div class="zen-pattern-select"><button class="zen-pattern-btn active" onclick="setZenPattern(\'spiral\')">螺旋</button><button class="zen-pattern-btn" onclick="setZenPattern(\'wave\')">波浪</button><button class="zen-pattern-btn" onclick="setZenPattern(\'circles\')">圆环</button></div><div class="zen-progress" id="zenProgress">跟随引导线描绘</div></div>';hint.innerHTML='禅绕画：跟随引导线，享受过程';initZen()}}
-function initBall(){const ball=document.getElementById('theBall'),shadow=document.getElementById('ballShadow'),pressureEl=document.getElementById('ballPressure');ballPressing=false;ballPressure=0;function startPress(e){e.preventDefault();ballPressing=true;pressureEl.style.opacity='1';if(ballRecoverInterval){clearInterval(ballRecoverInterval);ballRecoverInterval=null}ballVibInterval=setInterval(()=>{if(ballPressure<100)ballPressure+=2;updateBallShape();if(ballPressure%10===0)vibrate(10+ballPressure/5)},50)}function endPress(){ballPressing=false;if(ballVibInterval){clearInterval(ballVibInterval);ballVibInterval=null}vibrate([30,20,50]);ballRecoverInterval=setInterval(()=>{if(ballPressure>0){ballPressure-=1;updateBallShape()}else{clearInterval(ballRecoverInterval);ballRecoverInterval=null;pressureEl.style.opacity='0'}},30)}function updateBallShape(){const scale=1-ballPressure*0.003,skewX=ballPressure*0.15,br=50-ballPressure*0.15;ball.style.transform=`scale(${scale},${scale*0.85+0.15}) skewX(${skewX}deg)`;ball.style.borderRadius=`${br}% ${br}% ${50+ballPressure*0.2}% ${50+ballPressure*0.2}%`;shadow.style.width=(140+ballPressure*0.3)+'px';const msgs=['按住不放...','继续...','感受压力释放...','很好...','让压力流走...','🎉 太棒了！'];pressureEl.textContent=msgs[Math.min(Math.floor(ballPressure/20),5)]}ball.ontouchstart=ball.onmousedown=startPress;ball.ontouchend=ball.onmouseup=ball.ontouchcancel=ball.onmouseleave=endPress}
-function stopBallVibration(){if(ballVibInterval){clearInterval(ballVibInterval);ballVibInterval=null}if(ballRecoverInterval){clearInterval(ballRecoverInterval);ballRecoverInterval=null}}
-function initSand(){const canvas=document.getElementById('sandCanvas'),ctx=canvas.getContext('2d');canvas.width=canvas.offsetWidth*2;canvas.height=canvas.offsetHeight*2;ctx.scale(2,2);drawSandBase(ctx,canvas.offsetWidth,canvas.offsetHeight);sandCtx=ctx;sandHasDrawn=false;function getPos(e){const r=canvas.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top}}canvas.ontouchstart=canvas.onmousedown=e=>{e.preventDefault();sandDrawing=true;const p=getPos(e);sandLastX=p.x;sandLastY=p.y;if(!sandHasDrawn){document.getElementById('sandGuide').classList.add('hidden');sandHasDrawn=true}};canvas.ontouchmove=canvas.onmousemove=e=>{if(!sandDrawing)return;e.preventDefault();const p=getPos(e);sandCtx.strokeStyle='#8b6914';sandCtx.lineWidth=10+Math.random()*5;sandCtx.lineCap='round';sandCtx.beginPath();sandCtx.moveTo(sandLastX,sandLastY);sandCtx.lineTo(p.x,p.y);sandCtx.stroke();sandLastX=p.x;sandLastY=p.y;vibrate(3)};canvas.ontouchend=canvas.onmouseup=canvas.ontouchcancel=()=>sandDrawing=false}
-function drawSandBase(ctx,w,h){const grad=ctx.createLinearGradient(0,0,0,h);grad.addColorStop(0,'#d4a574');grad.addColorStop(1,'#c49a6c');ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);for(let i=0;i<2000;i++){ctx.fillStyle=`rgba(${180+Math.random()*40},${140+Math.random()*30},${90+Math.random()*20},${0.3+Math.random()*0.3})`;ctx.fillRect(Math.random()*w,Math.random()*h,1,1)}}
-function shakeSand(){vibrate([30,20,30,20,50]);const canvas=document.getElementById('sandCanvas');if(sandCtx){drawSandBase(sandCtx,canvas.offsetWidth,canvas.offsetHeight);sandHasDrawn=false;document.getElementById('sandGuide').classList.remove('hidden')}}
-function initZen(){const canvas=document.getElementById('zenCanvas'),ctx=canvas.getContext('2d');canvas.width=canvas.offsetWidth*2;canvas.height=canvas.offsetHeight*2;ctx.scale(2,2);ctx.fillStyle='#f5f0e6';ctx.fillRect(0,0,canvas.offsetWidth,canvas.offsetHeight);zenCtx=ctx;zenStrokes=0;drawZenGuide();function getPos(e){const r=canvas.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top}}canvas.ontouchstart=canvas.onmousedown=e=>{e.preventDefault();zenDrawing=true;const p=getPos(e);zenLastX=p.x;zenLastY=p.y};canvas.ontouchmove=canvas.onmousemove=e=>{if(!zenDrawing)return;e.preventDefault();const p=getPos(e);zenCtx.strokeStyle='#2d3436';zenCtx.lineWidth=2;
-zenCtx.lineCap='round';zenCtx.beginPath();zenCtx.moveTo(zenLastX,zenLastY);zenCtx.lineTo(p.x,p.y);zenCtx.stroke();zenLastX=p.x;zenLastY=p.y;zenStrokes++;if(zenStrokes%20===0)vibrate(5);updateZenProgress()};canvas.ontouchend=canvas.onmouseup=canvas.ontouchcancel=()=>zenDrawing=false}
-function setZenPattern(pattern){zenPattern=pattern;document.querySelectorAll('.zen-pattern-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');const canvas=document.getElementById('zenCanvas');zenCtx.fillStyle='#f5f0e6';zenCtx.fillRect(0,0,canvas.offsetWidth,canvas.offsetHeight);zenStrokes=0;drawZenGuide();document.getElementById('zenProgress').textContent='跟随引导线描绘'}
-function drawZenGuide(){const canvas=document.getElementById('zenCanvas'),w=canvas.offsetWidth,h=canvas.offsetHeight,cx=w/2,cy=h/2;zenCtx.strokeStyle='rgba(0,0,0,0.1)';zenCtx.lineWidth=1;zenCtx.setLineDash([5,5]);if(zenPattern==='spiral'){zenCtx.beginPath();for(let i=0;i<720;i++){const angle=i*Math.PI/180,r=10+i*0.15,x=cx+r*Math.cos(angle),y=cy+r*Math.sin(angle);i===0?zenCtx.moveTo(x,y):zenCtx.lineTo(x,y)}zenCtx.stroke()}else if(zenPattern==='wave'){for(let row=0;row<5;row++){zenCtx.beginPath();for(let x=20;x<w-20;x++){const y=60+row*50+Math.sin(x*0.05)*15;x===20?zenCtx.moveTo(x,y):zenCtx.lineTo(x,y)}zenCtx.stroke()}}else{for(let i=1;i<=5;i++){zenCtx.beginPath();zenCtx.arc(cx,cy,i*25,0,Math.PI*2);zenCtx.stroke()}}zenCtx.setLineDash([])}
-function updateZenProgress(){const msgs=['刚开始...','继续描绘...','很好，保持专注...','进入心流状态...','🧘 完美的专注'];document.getElementById('zenProgress').textContent=msgs[Math.min(Math.floor(zenStrokes/100),4)]}
+let ballInt=null,ballRec=null,ballPress=0;
+function setTouch(m){document.querySelectorAll('.touch-opt').forEach(o=>o.classList.remove('active'));document.querySelector(`.touch-opt:nth-child(${m==='ball'?1:m==='sand'?2:3})`).classList.add('active');stopBall();const cv=document.getElementById('touchCanvas'),tip=document.getElementById('touchTip');if(m==='ball'){cv.innerHTML='<div class="ball-scene"><div class="stress-ball" id="ball"></div><div class="ball-shadow" id="ballShd"></div><div class="ball-hint" id="ballHint">按住不放</div></div>';tip.textContent='按住球体，感受它在指尖变形';initBall()}else if(m==='sand'){cv.innerHTML='<div class="sand-scene"><canvas class="sand-cv" id="sandCv"></canvas><div class="sand-overlay" id="sandOvl"><div class="sand-icon">🏖️</div><div class="sand-text">用手指在沙上作画</div></div><button class="sand-clear" onclick="clearSand()">🔄</button></div>';tip.textContent='画完摇一摇清空';initSand()}else{cv.innerHTML='<div class="zen-scene"><canvas class="zen-cv" id="zenCv"></canvas><div class="zen-tabs"><button class="zen-tab active" onclick="setZen(\'spiral\')">螺旋</button><button class="zen-tab" onclick="setZen(\'wave\')">波浪</button><button class="zen-tab" onclick="setZen(\'circle\')">圆环</button></div><div class="zen-status" id="zenSt">跟随引导线</div></div>';tip.textContent='跟随灰
+色引导线描绘';initZen()}}
+function initBall(){const ball=document.getElementById('ball'),shd=document.getElementById('ballShd'),hint=document.getElementById('ballHint');ballPress=0;function down(e){e.preventDefault();hint.style.opacity='1';if(ballRec){clearInterval(ballRec);ballRec=null}ballInt=setInterval(()=>{if(ballPress<100)ballPress+=2;updBall();if(ballPress%10===0)vibrate(10+ballPress/5)},50)}function up(){if(ballInt){clearInterval(ballInt);ballInt=null}vibrate([25,15,40]);ballRec=setInterval(()=>{if(ballPress>0){ballPress-=1.5;if(ballPress<0)ballPress=0;updBall()}else{clearInterval(ballRec);ballRec=null;hint.style.opacity='0.5'}},25)}function updBall(){const sc=1-ballPress*0.003,sk=ballPress*0.12,br=50-ballPress*0.12;ball.style.transform=`scale(${sc},${sc*0.85+0.15}) skewX(${sk}deg)`;ball.style.borderRadius=`${br}% ${br}% ${52+ballPress*0.15}% ${52+ballPress*0.15}%`;shd.style.width=(55+ballPress*0.2)+'%';const msgs=['按住不放','继续...','感受压力释放','很好...','让压力流走','🎉 太棒了'];hint.textContent=msgs[Math.min(Math.floor(ballPress/18),5)]}ball.onmousedown=ball.ontouchstart=down;ball.onmouseup=ball.onmouseleave=ball.ontouchend=ball.ontouchcancel=up}
+function stopBall(){if(ballInt){clearInterval(ballInt);ballInt=null}if(ballRec){clearInterval(ballRec);ballRec=null}}
+let sandCtx=null,sandDraw=false,sandLX=0,sandLY=0;
+function initSand(){const cv=document.getElementById('sandCv'),ctx=cv.getContext('2d');cv.width=cv.offsetWidth*2;cv.height=cv.offsetHeight*2;ctx.scale(2,2);drawSandBg(ctx,cv.offsetWidth,cv.offsetHeight);sandCtx=ctx;function pos(e){const r=cv.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top}}cv.onmousedown=cv.ontouchstart=e=>{e.preventDefault();sandDraw=true;const p=pos(e);sandLX=p.x;sandLY=p.y;document.getElementById('sandOvl').classList.add('hidden')};cv.onmousemove=cv.ontouchmove=e=>{if(!sandDraw)return;e.preventDefault();const p=pos(e);sandCtx.strokeStyle='#78350f';sandCtx.lineWidth=12+Math.random()*6;sandCtx.lineCap='round';sandCtx.beginPath();sandCtx.moveTo(sandLX,sandLY);sandCtx.lineTo(p.x,p.y);sandCtx.stroke();sandLX=p.x;sandLY=p.y;vibrate(3)};cv.onmouseup=cv.ontouchend=cv.ontouchcancel=()=>sandDraw=false}
+function drawSandBg(ctx,w,h){const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#d4a574');g.addColorStop(1,'#c49a6c');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);for(let i=0;i<2500;i++){ctx.fillStyle=`rgba(${180+Math.random()*40},${140+Math.random()*30},${90+Math.random()*20},${0.25+Math.random()*0.3})`;ctx.fillRect(Math.random()*w,Math.random()*h,1,1)}}
+function clearSand(){vibrate([30,20,30,20,50]);const cv=document.getElementById('sandCv');if(sandCtx){drawSandBg(sandCtx,cv.offsetWidth,cv.offsetHeight);document.getElementById('sandOvl').classList.remove('hidden')}}
+let zenCtx=null,zenDraw=false,zenLX=0,zenLY=0,zenPat='spiral',zenStrokes=0;
+function initZen(){const cv=document.getElementById('zenCv'),ctx=cv.getContext('2d');cv.width=cv.offsetWidth*2;cv.height=cv.offsetHeight*2;ctx.scale(2,2);ctx.fillStyle='#faf8f5';ctx.fillRect(0,0,cv.offsetWidth,cv.offsetHeight);zenCtx=ctx;zenStrokes=0;drawZenGuide();function pos(e){const r=cv.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top}}cv.onmousedown=cv.ontouchstart=e=>{e.preventDefault();zenDraw=true;const p=pos(e);zenLX=p.x;zenLY=p.y};cv.onmousemove=cv.ontouchmove=e=>{if(!zenDraw)return;e.preventDefault();const p=pos(e);zenCtx.strokeStyle='#1f2937';zenCtx.lineWidth=2;zenCtx.lineCap='round';zenCtx.beginPath();zenCtx.moveTo(zenLX,zenLY);zenCtx.lineTo(p.x,p.y);zenCtx.stroke();zenLX=p.x;zenLY=p.y;zenStrokes++;if(zenStrokes%20===0)vibrate(4);updZen()};cv.onmouseup=cv.ontouchend=cv.ontouchcancel=()=>zenDraw=false}
+function setZen(p){zenPat=p;document.querySelectorAll('.zen-tab').forEach(t=>t.classList.remove('active'));event.target.classList.add('active');const cv=document.getElementById('zenCv');zenCtx.fillStyle='#faf8f5';zenCtx.fillRect(0,0,cv.offsetWidth,cv.offsetHeight);zenStrokes=0;drawZenGuide();document.getElementById('zenSt').textContent='跟随引导线'}
+function drawZenGuide(){const cv=document.getElementById('zenCv'),w=cv.offsetWidth,h=cv.offsetHeight,cx=w/2,cy=h/2;zenCtx.strokeStyle='rgba(0,0,0,0.08)';zenCtx.lineWidth=1;zenCtx.setLineDash([4,4]);if(zenPat==='spiral'){zenCtx.beginPath();for(let i=0;i<720;i++){const a=i*Math.PI/180,r=10+i*0.14,x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);i===0?zenCtx.moveTo(x,y):zenCtx.lineTo(x,y)}zenCtx.stroke()}else if(zenPat==='wave'){for(let row=0;row<5;row++){zenCtx.beginPath();for(let x=20;x<w-20;x++){const y=55+row*48+Math.sin(x*0.05)*14;x===20?zenCtx.moveTo(x,y):zenCtx.lineTo(x,y)}zenCtx.stroke()}}else{for(let i=1;i<=5;i++){zenCtx.beginPath();zenCtx.arc(cx,cy,i*24,0,Math.PI*2);zenCtx.stroke()}}zenCtx.setLineDash([])}
+function updZen(){const msgs=['刚开始...','继续...','保持专注...','心流状态...','🧘 完美'];document.getElementById('zenSt').textContent=msgs[Math.min(Math.floor(zenStrokes/100),4)]}
 </script>
 </body>
 </html>
