@@ -4,62 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#1a1a2e">
-    <title>深呼吸 - 3分钟解压</title>
+    <title id="pageTitle">深呼吸 - 3分钟解压</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; color: #f5f5f5; }
-        .container { max-width: 420px; margin: 0 auto; padding: 20px; min-height: 100vh; }
-        .header { text-align: center; padding: 30px 0 20px; }
-        .header h1 { font-size: 28px; font-weight: 300; letter-spacing: 4px; margin-bottom: 8px; }
-        .header p { font-size: 14px; color: #7f8fa6; }
-        .mood-section { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 24px; margin-bottom: 24px; }
-        .mood-title { text-align: center; font-size: 16px; margin-bottom: 20px; color: #a29bfe; }
-        .mood-options { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-        .mood-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 16px; font-size: 14px; color: #f5f5f5; cursor: pointer; }
-        .modules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        .module-card { background: rgba(255,255,255,0.06); border-radius: 16px; padding: 24px 12px; text-align: center; cursor: pointer; }
-        .module-icon { font-size: 32px; margin-bottom: 12px; }
-        .module-name { font-size: 14px; color: #ddd; }
-        .module-card.disabled { opacity: 0.4; pointer-events: none; }
-        .page { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); z-index: 100; padding: 20px; }
-        .page.active { display: flex; flex-direction: column; }
-        .page-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 20px; }
-        .back-btn { background: rgba(255,255,255,0.1); border: none; border-radius: 50%; width: 40px; height: 40px; color: #f5f5f5; font-size: 20px; cursor: pointer; }
-        .page-title { font-size: 18px; }
-        .page-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .breath-circle-container { width: 220px; height: 220px; margin-bottom: 40px; }
-        .breath-circle { width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle, rgba(162,155,254,0.4), rgba(162,155,254,0.1) 70%); box-shadow: 0 0 60px rgba(162,155,254,0.3); display: flex; align-items: center; justify-content: center; transition: transform 4s ease-in-out; }
-        .breath-circle.inhale { transform: scale(1.3); }
-        .breath-circle.exhale { transform: scale(0.8); }
-        .breath-timer { font-size: 48px; font-weight: 200; }
-        .breath-status { margin-top: 20px; font-size: 16px; color: #7f8fa6; }
-        .breath-progress { margin-top: 10px; font-size: 14px; color: #555; }
-        .start-btn { margin-top: 40px; background: linear-gradient(135deg, #a29bfe, #6c5ce7); border: none; border-radius: 30px; padding: 16px 48px; font-size: 16px; color: #fff; cursor: pointer; }
-        .bubble-container { position: absolute; top: 70px; left: 0; right: 0; bottom: 60px; overflow: hidden; }
-        .bubble { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(162,155,254,0.5) 60%, rgba(108,92,231,0.3)); cursor: pointer; animation: float 3s ease-in-out infinite; box-shadow: inset 0 -8px 25px rgba(162,155,254,0.4), 0 8px 20px rgba(0,0,0,0.15); }
-        .bubble::before { content: ''; position: absolute; top: 12%; left: 18%; width: 35%; height: 25%; background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.2)); border-radius: 50%; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes pop { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-        .bubble.pop { animation: pop 0.15s ease-out forwards; pointer-events: none; }
-        .bubble-score { position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; font-size: 16px; color: #a29bfe; }
-        .pop-text { position: absolute; font-size: 24px; pointer-events: none; animation: popText 0.5s ease-out forwards; }
-        @keyframes popText { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(1.2) translateY(-30px); opacity: 0; } }
-        .sound-list { width: 100%; max-width: 360px; }
-        .sound-item { background: rgba(255,255,255,0.06); border-radius: 16px; padding: 20px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border: 1px solid transparent; }
-        .sound-item.active { background: rgba(255,255,255,0.1); border-color: #a29bfe; }
-        .sound-info { display: flex; align-items: center; gap: 16px; }
-        .sound-icon { font-size: 28px; }
-        .sound-name { font-size: 16px; }
-        .sound-desc { font-size: 12px; color: #7f8fa6; }
-        .sound-toggle { width: 50px; height: 28px; background: rgba(255,255,255,0.1); border-radius: 14px; position: relative; }
-        .sound-toggle::after { content: ''; position: absolute; top: 4px; left: 4px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: left 0.3s; }
-        .sound-item.active .sound-toggle { background: #a29bfe; }
-        .sound-item.active .sound-toggle::after { left: 26px; }
-        .volume-control { margin-top: 30px; width: 100%; max-width: 360px; }
-        .volume-label { font-size: 14px; color: #7f8fa6; margin-bottom: 12px; display: flex; justify-content: space-between; }
-        .volume-slider { width: 100%; -webkit-appearance: none; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; }
-        .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: #a29bfe; border-radius: 50%; }
-        .footer { text-align: center; padding: 30px 0; font-size: 12px; color: #555; }
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+        body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);min-height:100vh;color:#f5f5f5}
+        .container{max-width:420px;margin:0 auto;padding:20px;min-height:100vh}
+        .header{text-align:center;padding:30px 0 20px}
+        .header h1{font-size:28px;font-weight:300;letter-spacing:4px;margin-bottom:8px}
+        .header p{font-size:14px;color:#7f8fa6}
+        .mood-section{background:rgba(255,255,255,0.05);border-radius:20px;padding:24px;margin-bottom:24px}
+        .mood-title{text-align:center;font-size:16px;margin-bottom:8px;color:#a29bfe}
+        .mood-desc{text-align:center;font-size:12px;color:#666;margin-bottom:20px}
+        .mood-options{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+        .mood-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 16px;font-size:14px;color:#f5f5f5;cursor:pointer}
+        .mood-btn.selected{background:rgba(162,155,254,0.3);border-color:#a29bfe}
+        .recommend-section{display:none;background:rgba(162,155,254,0.1);border-radius:16px;padding:20px;margin-bottom:24px;border:1px solid rgba(162,155,254,0.2)}
+        .recommend-section.show{display:block;animation:fadeIn .3s ease}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+        .recommend-title{font-size:14px;color:#a29bfe;margin-bottom:12px}
+        .recommend-btns{display:flex;gap:12px;flex-wrap:wrap}
+        .recommend-btn{background:rgba(162,155,254,0.2);border:1px solid #a29bfe;border-radius:20px;padding:10px 20px;font-size:14px;color:#fff;cursor:pointer}
+        .modules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+        .module-card{background:rgba(255,255,255,0.06);border-radius:16px;padding:24px 12px;text-align:center;cursor:pointer}
+        .module-icon{font-size:32px;margin-bottom:12px}
+        .module-name{font-size:14px;color:#ddd}
+        .module-card.disabled{opacity:0.4;pointer-events:none}
+        .page{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);z-index:100;padding:20px;overflow-y:auto}
+        .page.active{display:flex;flex-direction:column}
+        .page-header{display:flex;justify-content:space-between;align-items:center;padding:10px 0 20px}
+        .back-btn{background:rgba(255,255,255,0.1);border:none;border-radius:50%;width:40px;height:40px;color:#f5f5f5;font-size:20px;cursor:pointer}
+        .page-title{font-size:18px}
+        .page-content{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+        .science-card{background:rgba(162,155,254,0.1);border-radius:16px;padding:16px 20px;margin-bottom:30px;width:100%;max-width:340px;border-left:3px solid #a29bfe}
+        .science-card h4{font-size:13px;color:#a29bfe;margin-bottom:8px}
+        .science-card p{font-size:12px;color:#9f9f9f;line-height:1.6}
+        .science-card .source{font-size:11px;color:#666;margin-top:8px;font-style:italic}
+        .breath-circle-container{width:200px;height:200px;margin-bottom:30px}
+        .breath-circle{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle,rgba(162,155,254,0.4),rgba(162,155,254,0.1) 70%);box-shadow:0 0 60px rgba(162,155,254,0.3);display:flex;align-items:center;justify-content:center;transition:transform 4s ease-in-out}
+        .breath-circle.inhale{transform:scale(1.3)}
+        .breath-circle.exhale{transform:scale(0.8)}
+        .breath-timer{font-size:48px;font-weight:200}
+        .breath-status{margin-top:16px;font-size:18px;color:#a29bfe}
+        .breath-progress{margin-top:8px;font-size:14px;color:#666}
+        .start-btn{margin-top:30px;background:linear-gradient(135deg,#a29bfe,#6c5ce7);border:none;border-radius:30px;padding:16px 48px;font-size:16px;color:#fff;cursor:pointer}
+        .bubble-container{position:absolute;top:70px;left:0;right:0;bottom:100px;overflow:hidden}
+        .bubble{position:absolute;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.9),rgba(162,155,254,0.5) 60%,rgba(108,92,231,0.3));cursor:pointer;animation:float 3s ease-in-out infinite;box-shadow:inset 0 -8px 25px rgba(162,155,254,0.4)}
+        .bubble::before{content:'';position:absolute;top:12%;left:18%;width:35%;height:25%;background:linear-gradient(135deg,rgba(255,255,255,0.9),rgba(255,255,255,0.2));border-radius:50%}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+        @keyframes pop{0%{transform:scale(1);opacity:1}100%{transform:scale(1.5);opacity:0}}
+        .bubble.pop{animation:pop .15s ease-out forwards;pointer-events:none}
+        .bubble-footer{position:absolute;bottom:0;left:0;right:0;padding:15px 20px;background:rgba(26,26,46,0.95)}
+        .bubble-score{text-align:center;font-size:16px;color:#a29bfe;margin-bottom:10px}
+        .bubble-tip{text-align:center;font-size:11px;color:#666;line-height:1.5}
+        .pop-text{position:absolute;font-size:24px;pointer-events:none;animation:popText .5s ease-out forwards;z-index:10}
+        @keyframes popText{0%{transform:scale(0.5);opacity:1}100%{transform:scale(1.2) translateY(-30px);opacity:0}}
+        .sound-list{width:100%;max-width:360px}
+        .sound-item{background:rgba(255,255,255,0.06);border-radius:16px;padding:20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border:1px solid transparent}
+        .sound-item.active{background:rgba(255,255,255,0.1);border-color:#a29bfe}
+        .sound-info{display:flex;align-items:center;gap:16px}
+        .sound-icon{font-size:28px}
+        .sound-name{font-size:16px}
+        .sound-desc{font-size:12px;color:#7f8fa6}
+        .sound-toggle{width:50px;height:28px;background:rgba(255,255,255,0.1);border-radius:14px;position:relative}
+        .sound-toggle::after{content:'';position:absolute;top:4px;left:4px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left .3s}
+        .sound-item.active .sound-toggle{background:#a29bfe}
+        .sound-item.active .sound-toggle::after{left:26px}
+        .volume-control{margin-top:24px;width:100%;max-width:360px}
+        .volume-label{font-size:14px;color:#7f8fa6;margin-bottom:12px;display:flex;justify-content:space-between}
+        .volume-slider{width:100%;-webkit-appearance:none;height:6px;background:rgba(255,255,255,0.1);border-radius:3px}
+        .volume-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;background:#a29bfe;border-radius:50%}
+        .sound-tip{text-align:center;font-size:12px;color:#666;margin-top:20px}
+        .footer{text-align:center;padding:30px 0;font-size:12px;color:#555}
     </style>
 </head>
 <body>
@@ -67,13 +82,18 @@
         <div class="header"><h1>深呼吸</h1><p>基于脑科学的3分钟解压</p></div>
         <div class="mood-section">
             <div class="mood-title">现在感觉怎么样？</div>
+            <div class="mood-desc">选择后为你推荐最适合的解压方式</div>
             <div class="mood-options">
-                <button class="mood-btn" onclick="openPage('breath')">😰 很焦虑</button>
-                <button class="mood-btn" onclick="openPage('sound')">😔 有点丧</button>
-                <button class="mood-btn" onclick="openPage('bubble')">😤 烦躁</button>
-                <button class="mood-btn" onclick="openPage('sound')">🥱 疲惫</button>
-                <button class="mood-btn" onclick="openPage('breath')">😶 说不清</button>
+                <button class="mood-btn" onclick="selectMood(this,'anxious')">😰 很焦虑</button>
+                <button class="mood-btn" onclick="selectMood(this,'sad')">😔 有点丧</button>
+                <button class="mood-btn" onclick="selectMood(this,'angry')">😤 烦躁</button>
+                <button class="mood-btn" onclick="selectMood(this,'tired')">🥱 疲惫</button>
+                <button class="mood-btn" onclick="selectMood(this,'unclear')">😶 说不清</button>
             </div>
+        </div>
+        <div class="recommend-section" id="recommendSection">
+            <div class="recommend-title">💡 为你推荐</div>
+            <div class="recommend-btns" id="recommendBtns"></div>
         </div>
         <div class="modules">
             <div class="module-card" onclick="openPage('breath')"><div class="module-icon">🫁</div><div class="module-name">呼吸</div></div>
@@ -85,26 +105,28 @@
         </div>
         <div class="footer">每个功能都有科学依据</div>
     </div>
-
     <div class="page" id="breath-page">
-        <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">4-7-8 呼吸法</div><div style="width:40px"></div></div>
+        <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">🫁 科学呼吸</div><div style="width:40px"></div></div>
         <div class="page-content">
+            <div class="science-card"><h4>🔬 科学原理</h4><p>4-7-8呼吸法通过延长呼气时间，激活迷走神经，触发副交感神经的"休息-消化"反应，60秒内可显著降低心率和血压。</p><div class="source">— Harvard Medical School, Dr. Andrew Weil</div></div>
             <div class="breath-circle-container"><div class="breath-circle" id="breathCircle"><div class="breath-timer" id="breathTimer">4</div></div></div>
             <div class="breath-status" id="breathStatus">准备好了吗？</div>
             <div class="breath-progress" id="breathProgress"></div>
             <button class="start-btn" id="breathBtn" onclick="toggleBreath()">开始呼吸</button>
         </div>
     </div>
-
     <div class="page" id="bubble-page">
-        <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">捏泡泡解压</div><div style="width:40px"></div></div>
+        <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">🫧 捏泡泡</div><div style="width:40px"></div></div>
         <div class="bubble-container" id="bubbleContainer"></div>
-        <div class="bubble-score">已捏爆 <span id="bubbleCount">0</span> 个 🎉</div>
+        <div class="bubble-footer">
+            <div class="bubble-score">已捏爆 <span id="bubbleCount">0</span> 个 🎉</div>
+            <div class="bubble-tip">🔬 具身认知理论：模拟破坏动作可象征性释放压力，降低攻击冲动<br>— Niedenthal, Science 2007</div>
+        </div>
     </div>
-
     <div class="page" id="sound-page">
-        <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">声音疗愈</div><div style="width:40px"></div></div>
+        <div class="page-header"><button class="back-btn" onclick="closePage()">←</button><div class="page-title">🎵 声音疗愈</div><div style="width:40px"></div></div>
         <div class="page-content">
+            <div class="science-card"><h4>🔬 科学原理</h4><p>特定频率声音可影响脑电波状态。粉红噪音增强深度睡眠，自然音唤起进化上的安全感，帮助降低皮质醇水平。</p><div class="source">— Journal of Theoretical Biology, 2012</div></div>
             <div class="sound-list">
                 <div class="sound-item" data-sound="rain" onclick="toggleSound(this)"><div class="sound-info"><span class="sound-icon">🌧️</span><div><div class="sound-name">雨声</div><div class="sound-desc">淅淅沥沥的小雨</div></div></div><div class="sound-toggle"></div></div>
                 <div class="sound-item" data-sound="wave" onclick="toggleSound(this)"><div class="sound-info"><span class="sound-icon">🌊</span><div><div class="sound-name">海浪</div><div class="sound-desc">有节奏的潮起潮落</div></div></div><div class="sound-toggle"></div></div>
@@ -112,81 +134,34 @@
                 <div class="sound-item" data-sound="white" onclick="toggleSound(this)"><div class="sound-info"><span class="sound-icon">📻</span><div><div class="sound-name">白噪音</div><div class="sound-desc">均匀的嘶嘶声</div></div></div><div class="sound-toggle"></div></div>
             </div>
             <div class="volume-control"><div class="volume-label"><span>音量</span><span id="volumeValue">50%</span></div><input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50" oninput="setVolume(this.value)"></div>
+            <div class="sound-tip">可同时开启多个声音混合播放</div>
         </div>
     </div>
-
-    <script>
-        function openPage(p){document.getElementById(p+'-page').classList.add('active');document.getElementById('home').style.display='none';if(p==='bubble')initBubbles();vibrate(30);}
-        function closePage(){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('home').style.display='block';if(breathInterval)stopBreath();stopAllSounds();}
-        function vibrate(p){if(navigator.vibrate)navigator.vibrate(p);}
-
-        // 呼吸
-        let breathInterval=null,breathPhase=0,breathCount=0,breathTimer=0;
-        const breathCfg={inhale:4,hold:7,exhale:8,rounds:4};
-        function toggleBreath(){breathInterval?stopBreath():startBreath();}
-        function startBreath(){breathPhase=0;breathCount=0;breathTimer=breathCfg.inhale;document.getElementById('breathBtn').textContent='停止';document.getElementById('breathCircle').className='breath-circle inhale';updateBreathUI();breathInterval=setInterval(()=>{breathTimer--;if(breathTimer<=0){breathPhase++;if(breathPhase>2){breathPhase=0;breathCount++;if(breathCount>=breathCfg.rounds){completeBreath();return;}}switch(breathPhase){case 0:breathTimer=breathCfg.inhale;document.getElementById('breathCircle').className='breath-circle inhale';break;case 1:breathTimer=breathCfg.hold;document.getElementById('breathCircle').className='breath-circle';break;case 2:breathTimer=breathCfg.exhale;document.getElementById('breathCircle').className='breath-circle exhale';break;}vibrate(50);}updateBreathUI();},1000);}
-        function updateBreathUI(){document.getElementById('breathTimer').textContent=breathTimer;document.getElementById('breathStatus').textContent=['吸气...','屏住...','呼气...'][breathPhase];document.getElementById('breathProgress').textContent=`第 ${breathCount+1}/${breathCfg.rounds} 轮`;}
-        function stopBreath(){clearInterval(breathInterval);breathInterval=null;document.getElementById('breathBtn').textContent='开始呼吸';document.getElementById('breathStatus').textContent='准备好了吗？';document.getElementById('breathProgress').textContent='';document.getElementById('breathCircle').className='breath-circle';document.getElementById('breathTimer').textContent='4';}
-        function completeBreath(){stopBreath();document.getElementById('breathStatus').textContent='✨ 完成！感觉好点了吗？';vibrate([100,50,100]);}
-
-        // 泡泡
-        let bubbleCount=0,popCtx=null;
-        function initBubbles(){const c=document.getElementById('bubbleContainer');c.innerHTML='';bubbleCount=0;document.getElementById('bubbleCount').textContent='0';for(let i=0;i<12;i++)createBubble();if(!popCtx)popCtx=new(window.AudioContext||window.webkitAudioContext)();}
-        function createBubble(){const c=document.getElementById('bubbleContainer'),b=document.createElement('div');b.className='bubble';const s=50+Math.random()*45;b.style.width=s+'px';b.style.height=s+'px';b.style.left=(10+Math.random()*(c.offsetWidth-s-20))+'px';b.style.top=(10+Math.random()*(c.offsetHeight-s-20))+'px';b.style.animationDelay=Math.random()*2+'s';b.ontouchstart=b.onclick=function(e){e.preventDefault();e.stopPropagation();popBubble(this);};c.appendChild(b);}
-        function playPopSound(){if(!popCtx)return;if(popCtx.state==='suspended')popCtx.resume();const o=popCtx.createOscillator(),g=popCtx.createGain();o.type='sine';o.frequency.setValueAtTime(800+Math.random()*600,popCtx.currentTime);o.frequency.exponentialRampToValueAtTime(200,popCtx.currentTime+0.08);g.gain.setValueAtTime(0.25,popCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,popCtx.currentTime+0.08);o.connect(g);g.connect(popCtx.destination);o.start();o.stop(popCtx.currentTime+0.08);const n=popCtx.createBufferSource(),nb=popCtx.createBuffer(1,popCtx.sampleRate*0.06,popCtx.sampleRate),nd=nb.getChannelData(0);for(let i=0;i<nb.length;i++)nd[i]=(Math.random()*2-1)*Math.exp(-i/(nb.length*0.15));n.buffer=nb;const ng=popCtx.createGain();ng.gain.value=0.2;n.connect(ng);ng.connect(popCtx.destination);n.start();}
-        function popBubble(b){if(b.classList.contains('pop'))return;playPopSound();vibrate([20,15,30]);const r=b.getBoundingClientRect();showPopFx(r.left+r.width/2,r.top+r.height/2);b.classList.add('pop');bubbleCount++;document.getElementById('bubbleCount').textContent=bubbleCount;setTimeout(()=>{b.remove();createBubble();if(Math.random()>0.5)createBubble();},150);}
-        function showPopFx(x,y){const e=['💥','✨','💫','⭐'][Math.floor(Math.random()*4)],el=document.createElement('div');el.className='pop-text';el.textContent=e;el.style.left=x+'px';el.style.top=y+'px';document.getElementById('bubble-page').appendChild(el);setTimeout(()=>el.remove(),500);}
-
-        // 声音 - 完全不同的音色
-        let audioCtx=null;const activeNodes={};let vol=0.5;
-        function getCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
-        
-        function createSoundBuffer(type){
-            const ctx=getCtx(),sr=ctx.sampleRate,len=sr*4,buf=ctx.createBuffer(2,len,sr),L=buf.getChannelData(0),R=buf.getChannelData(1);
-            if(type==='white'){
-                for(let i=0;i<len;i++){L[i]=R[i]=(Math.random()*2-1)*0.5;}
-            }else if(type==='rain'){
-                let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
-                for(let i=0;i<len;i++){
-                    const w=Math.random()*2-1;b0=0.99886*b0+w*0.0555179;b1=0.99332*b1+w*0.0750759;b2=0.96900*b2+w*0.1538520;b3=0.86650*b3+w*0.3104856;b4=0.55000*b4+w*0.5329522;b5=-0.7616*b5-w*0.0168980;
-                    const p=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.06;b6=w*0.115926;
-                    L[i]=p;R[i]=p;
-                    if(Math.random()<0.001){const di=Math.random()*0.4;for(let j=0;j<150&&i+j<len;j++){const de=Math.exp(-j/20);L[i+j]+=di*de*(Math.random()-0.5);R[i+j]+=di*de*(Math.random()-0.5)*0.8;}}
-                }
-            }else if(type==='wave'){
-                for(let i=0;i<len;i++){
-                    const t=i/sr,cycle=t%8,phase=cycle/8;
-                    let env=phase<0.5?Math.sin(phase*Math.PI):Math.sin(phase*Math.PI)*0.3;
-                    let n=(Math.random()*2-1)*0.3*env;
-                    const lfo=Math.sin(t*0.5)*0.2;n+=lfo*env*0.1;
-                    L[i]=n;R[i]=n*(0.9+Math.random()*0.2);
-                }
-            }else if(type==='fire'){
-                for(let i=0;i<len;i++){
-                    let n=(Math.random()*2-1)*0.15;
-                    if(Math.random()<0.003){const ci=0.3+Math.random()*0.4;for(let j=0;j<400&&i+j<len;j++){const ce=Math.exp(-j/60);const cf=200+Math.random()*300;L[i+j]+=ci*ce*Math.sin(j/sr*cf*Math.PI*2)*(0.5+Math.random()*0.5);}}
-                    if(Math.random()<0.008){const pi=0.2+Math.random()*0.3;for(let j=0;j<80&&i+j<len;j++){const pe=Math.exp(-j/15);L[i+j]+=pi*pe*(Math.random()-0.5);}}
-                    L[i]+=n;R[i]=L[i]*(0.85+Math.random()*0.3);
-                }
-            }
-            return buf;
-        }
-
-        function toggleSound(el){
-            const type=el.dataset.sound;
-            if(el.classList.contains('active')){
-                el.classList.remove('active');
-                if(activeNodes[type]){activeNodes[type].src.stop();delete activeNodes[type];}
-            }else{
-                el.classList.add('active');
-                const ctx=getCtx(),buf=createSoundBuffer(type),src=ctx.createBufferSource(),gain=ctx.createGain();
-                src.buffer=buf;src.loop=true;gain.gain.value=vol;
-                src.connect(gain);gain.connect(ctx.destination);src.start();
-                activeNodes[type]={src,gain};
-            }
-        }
-        function setVolume(v){vol=v/100;document.getElementById('volumeValue').textContent=v+'%';Object.values(activeNodes).forEach(n=>n.gain.gain.value=vol);}
-        function stopAllSounds(){Object.keys(activeNodes).forEach(k=>{activeNodes[k].src.stop();delete activeNodes[k];});document.querySelectorAll('.sound-item').forEach(el=>el.classList.remove('active'));}
-    </script>
+<script>
+const pageTitles={home:'深呼吸 - 3分钟解压',breath:'科学呼吸 - 深呼吸',bubble:'捏泡泡 - 深呼吸',sound:'声音疗愈 - 深呼吸'};
+const moodRec={anxious:[{n:'🫁 呼吸',p:'breath'},{n:'🎵 白噪音',p:'sound'}],sad:[{n:'🎵 雨声',p:'sound'},{n:'🫁 呼吸',p:'breath'}],angry:[{n:'🫧 捏泡泡',p:'bubble'},{n:'🎵 海浪',p:'sound'}],tired:[{n:'🎵 篝火',p:'sound'},{n:'🫁 呼吸',p:'breath'}],unclear:[{n:'🫁 呼吸',p:'breath'},{n:'🫧 泡泡',p:'bubble'}]};
+function selectMood(btn,mood){document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');vibrate(30);const s=document.getElementById('recommendSection'),c=document.getElementById('recommendBtns');c.innerHTML=moodRec[mood].map(r=>'<button class="recommend-btn" onclick="openPage(\''+r.p+'\')">'+r.n+'</button>').join('');s.classList.add('show');setTimeout(()=>s.scrollIntoView({behavior:'smooth',block:'center'}),100)}
+function openPage(p){document.getElementById(p+'-page').classList.add('active');document.getElementById('home').style.display='none';document.getElementById('pageTitle').textContent=pageTitles[p];if(p==='bubble')initBubbles();vibrate(30)}
+function closePage(){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('home').style.display='block';document.getElementById('pageTitle').textContent=pageTitles.home;if(breathInterval)stopBreath();stopAllSounds()}
+function vibrate(p){if(navigator.vibrate)navigator.vibrate(p)}
+let breathInterval=null,breathPhase=0,breathCount=0,breathTimer=0;const breathCfg={inhale:4,hold:7,exhale:8,rounds:4};
+function toggleBreath(){breathInterval?stopBreath():startBreath()}
+function startBreath(){breathPhase=0;breathCount=0;breathTimer=breathCfg.inhale;document.getElementById('breathBtn').textContent='停止';document.getElementById('breathCircle').className='breath-circle inhale';updateBreathUI();breathInterval=setInterval(()=>{breathTimer--;if(breathTimer<=0){breathPhase++;if(breathPhase>2){breathPhase=0;breathCount++;if(breathCount>=breathCfg.rounds){completeBreath();return}}switch(breathPhase){case 0:breathTimer=breathCfg.inhale;document.getElementById('breathCircle').className='breath-circle inhale';break;case 1:breathTimer=breathCfg.hold;document.getElementById('breathCircle').className='breath-circle';break;case 2:breathTimer=breathCfg.exhale;document.getElementById('breathCircle').className='breath-circle exhale';break}vibrate(50)}updateBreathUI()},1000)}
+function updateBreathUI(){document.getElementById('breathTimer').textContent=breathTimer;document.getElementById('breathStatus').textContent=['吸气...','屏住...','呼气...'][breathPhase];document.getElementById('breathProgress').textContent='第 '+(breathCount+1)+'/'+breathCfg.rounds+' 轮'}
+function stopBreath(){clearInterval(breathInterval);breathInterval=null;document.getElementById('breathBtn').textContent='开始呼吸';document.getElementById('breathStatus').textContent='准备好了吗？';document.getElementById('breathProgress').textContent='';document.getElementById('breathCircle').className='breath-circle';document.getElementById('breathTimer').textContent='4'}
+function completeBreath(){stopBreath();document.getElementById('breathStatus').textContent='✨ 完成！感觉好点了吗？';vibrate([100,50,100])}
+let bubbleCount=0,popCtx=null;
+function initBubbles(){const c=document.getElementById('bubbleContainer');c.innerHTML='';bubbleCount=0;document.getElementById('bubbleCount').textContent='0';for(let i=0;i<12;i++)createBubble();if(!popCtx)popCtx=new(window.AudioContext||window.webkitAudioContext)()}
+function createBubble(){const c=document.getElementById('bubbleContainer'),b=document.createElement('div');b.className='bubble';const s=50+Math.random()*45;b.style.width=s+'px';b.style.height=s+'px';b.style.left=(10+Math.random()*(c.offsetWidth-s-20))+'px';b.style.top=(10+Math.random()*(c.offsetHeight-s-20))+'px';b.style.animationDelay=Math.random()*2+'s';b.ontouchstart=b.onclick=function(e){e.preventDefault();e.stopPropagation();popBubble(this)};c.appendChild(b)}
+function playPopSound(){if(!popCtx)return;if(popCtx.state==='suspended')popCtx.resume();const o=popCtx.createOscillator(),g=popCtx.createGain();o.type='sine';o.frequency.setValueAtTime(800+Math.random()*600,popCtx.currentTime);o.frequency.exponentialRampToValueAtTime(200,popCtx.currentTime+0.08);g.gain.setValueAtTime(0.25,popCtx.currentTime);g.gain.exponentialRampToValueAtTime(0.01,popCtx.currentTime+0.08);o.connect(g);g.connect(popCtx.destination);o.start();o.stop(popCtx.currentTime+0.08);const n=popCtx.createBufferSource(),nb=popCtx.createBuffer(1,popCtx.sampleRate*0.06,popCtx.sampleRate),nd=nb.getChannelData(0);for(let i=0;i<nb.length;i++)nd[i]=(Math.random()*2-1)*Math.exp(-i/(nb.length*0.15));n.buffer=nb;const ng=popCtx.createGain();ng.gain.value=0.2;n.connect(ng);ng.connect(popCtx.destination);n.start()}
+function popBubble(b){if(b.classList.contains('pop'))return;playPopSound();vibrate([20,15,30]);const r=b.getBoundingClientRect();showPopFx(r.left+r.width/2,r.top+r.height/2);b.classList.add('pop');bubbleCount++;document.getElementById('bubbleCount').textContent=bubbleCount;setTimeout(()=>{b.remove();createBubble();if(Math.random()>0.5)createBubble()},150)}
+function showPopFx(x,y){const e=['💥','✨','💫','⭐'][Math.floor(Math.random()*4)],el=document.createElement('div');el.className='pop-text';el.textContent=e;el.style.left=x+'px';el.style.top=y+'px';document.getElementById('bubble-page').appendChild(el);setTimeout(()=>el.remove(),500)}
+let audioCtx=null;const activeNodes={};let vol=0.5;
+function getCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}
+function createSoundBuffer(type){const ctx=getCtx(),sr=ctx.sampleRate,len=sr*4,buf=ctx.createBuffer(2,len,sr),L=buf.getChannelData(0),R=buf.getChannelData(1);if(type==='white'){for(let i=0;i<len;i++)L[i]=R[i]=(Math.random()*2-1)*0.5}else if(type==='rain'){let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;b0=0.99886*b0+w*0.0555179;b1=0.99332*b1+w*0.0750759;b2=0.969*b2+w*0.153852;b3=0.8665*b3+w*0.3104856;b4=0.55*b4+w*0.5329522;b5=-0.7616*b5-w*0.016898;const p=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.06;b6=w*0.115926;L[i]=p;R[i]=p;if(Math.random()<0.001){const di=Math.random()*0.4;for(let j=0;j<150&&i+j<len;j++){const de=Math.exp(-j/20);L[i+j]+=di*de*(Math.random()-0.5);R[i+j]+=di*de*(Math.random()-0.5)*0.8}}}}else if(type==='wave'){for(let i=0;i<len;i++){const t=i/sr,cycle=t%8,phase=cycle/8;let env=phase<0.5?Math.sin(phase*Math.PI):Math.sin(phase*Math.PI)*0.3;let n=(Math.random()*2-1)*0.3*env;L[i]=n;R[i]=n*(0.9+Math.random()*0.2)}}else if(type==='fire'){for(let i=0;i<len;i++){let n=(Math.random()*2-1)*0.15;if(Math.random()<0.003){const ci=0.3+Math.random()*0.4;for(let j=0;j<400&&i+j<len;j++){const ce=Math.exp(-j/60),cf=200+Math.random()*300;L[i+j]+=ci*ce*Math.sin(j/sr*cf*Math.PI*2)*(0.5+Math.random()*0.5)}}if(Math.random()<0.008){const pi=0.2+Math.random()*0.3;for(let j=0;j<80&&i+j<len;j++){const pe=Math.exp(-j/15);L[i+j]+=pi*pe*(Math.random()-0.5)}}L[i]+=n;R[i]=L[i]*(0.85+Math.random()*0.3)}}return buf}
+function toggleSound(el){const type=el.dataset.sound;if(el.classList.contains('active')){el.classList.remove('active');if(activeNodes[type]){activeNodes[type].src.stop();delete activeNodes[type]}}else{el.classList.add('active');const ctx=getCtx(),buf=createSoundBuffer(type),src=ctx.createBufferSource(),gain=ctx.createGain();src.buffer=buf;src.loop=true;gain.gain.value=vol;src.connect(gain);gain.connect(ctx.destination);src.start();activeNodes[type]={src,gain}}}
+function setVolume(v){vol=v/100;document.getElementById('volumeValue').textContent=v+'%';Object.values(activeNodes).forEach(n=>n.gain.gain.value=vol)}
+function stopAllSounds(){Object.keys(activeNodes).forEach(k=>{activeNodes[k].src.stop();delete activeNodes[k]});document.querySelectorAll('.sound-item').forEach(el=>el.classList.remove('active'))}
+</script>
 </body>
 </html>
